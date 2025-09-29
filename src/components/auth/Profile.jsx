@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { makeApiRequest } from '../utils/api';
 import './Auth.css';
 
 const Profile = () => {
@@ -36,17 +37,10 @@ const Profile = () => {
 
   const fetchUserProfile = async (token) => {
     try {
-      // Determine the API base URL based on the environment
-      const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const apiBaseUrl = isDevelopment 
-        ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
-      
-      const response = await fetch(`${apiBaseUrl}/api/user_details`, {
+      const response = await makeApiRequest('/api/user_details', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
         },
       });
 
@@ -79,18 +73,11 @@ const Profile = () => {
 
   const fetchUserStats = async (token) => {
     try {
-      // Determine the API base URL based on the environment
-      const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const apiBaseUrl = isDevelopment 
-        ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
-      
       // Fetch total expense amount
-      const totalAmountResponse = await fetch(`${apiBaseUrl}/api/total_amount`, {
+      const totalAmountResponse = await makeApiRequest('/api/total_amount', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
         },
       });
 
@@ -106,11 +93,10 @@ const Profile = () => {
       }
 
       // Fetch total transactions
-      const totalTransactionsResponse = await fetch(`${apiBaseUrl}/api/total_transactions`, {
+      const totalTransactionsResponse = await makeApiRequest('/api/total_transactions', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
         },
       });
 
@@ -134,17 +120,10 @@ const Profile = () => {
 
   const fetchCategoriesCount = async (token) => {
     try {
-      // Determine the API base URL based on the environment
-      const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const apiBaseUrl = isDevelopment 
-        ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
-      
-      const response = await fetch(`${apiBaseUrl}/api/categories`, {
+      const response = await makeApiRequest('/api/categories', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
         },
       });
 
@@ -169,17 +148,10 @@ const Profile = () => {
   // ✅ Fetch total budget for the month
   const fetchTotalBudgetForMonth = async (token, month) => {
     try {
-      // Determine the API base URL based on the environment
-      const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const apiBaseUrl = isDevelopment 
-        ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
-      
-      const response = await fetch(`${apiBaseUrl}/api/total-set-budget-amount-according-to-month?month=${month}`, {
+      const response = await makeApiRequest(`/api/total-set-budget-amount-according-to-month?month=${month}`, {
         method: "GET",
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
         },
       });
 

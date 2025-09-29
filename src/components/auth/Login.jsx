@@ -3,6 +3,7 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import { handleGoogleCallback } from '../utils/GoogleAuth';
 import Navbar from '../Navbar';
+import { makeApiRequest, getApiBaseUrl } from '../utils/api';
 import './Auth.css';
 
 const Login = () => {
@@ -41,11 +42,10 @@ const Login = () => {
       // Try to verify the token and get user info using the auth context
       const verifyTokenAndLogin = async () => {
         try {
-          const response = await fetch('/api/verify-token', {
+          const response = await makeApiRequest('/api/verify-token', {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
             },
             credentials: 'include'
           });
@@ -105,11 +105,8 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await fetch('/api/login', {
+      const response = await makeApiRequest('/api/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify(formData),
         credentials: 'include'
       });
@@ -149,7 +146,7 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await fetch(`/api/LoginVerificationEmailCodeAnd2FAOtp?code=${verificationData.emailCode}&otp=${verificationData.totp}`, {
+      const response = await makeApiRequest(`/api/LoginVerificationEmailCodeAnd2FAOtp?code=${verificationData.emailCode}&otp=${verificationData.totp}`, {
         method: 'GET',
         credentials: 'include'
       });
@@ -189,7 +186,7 @@ const Login = () => {
     }
 
     try {
-      const response = await fetch(`/api/re-active-account?email=${encodeURIComponent(reactivationData.email)}`, {
+      const response = await makeApiRequest(`/api/re-active-account?email=${encodeURIComponent(reactivationData.email)}`, {
         method: 'POST'
       });
 
@@ -221,7 +218,7 @@ const Login = () => {
     }
 
     try {
-      const response = await fetch(`/api/re-active-account-verification-email-code?code=${reactivationData.code}`, {
+      const response = await makeApiRequest(`/api/re-active-account-verification-email-code?code=${reactivationData.code}`, {
         method: 'POST'
       });
 
@@ -316,7 +313,8 @@ const Login = () => {
                   setIsLoading(true);
                   setError('');
                   const frontendRedirectUri = window.location.origin;
-                  const googleRegisterUrl = `/api/register_via_google?frontend_redirect_uri=${encodeURIComponent(frontendRedirectUri)}`;
+                  const apiBaseUrl = getApiBaseUrl();
+                  const googleRegisterUrl = `${apiBaseUrl}/api/register_via_google?frontend_redirect_uri=${encodeURIComponent(frontendRedirectUri)}`;
                   window.location.href = googleRegisterUrl;
                 } catch (err) {
                   setError('An error occurred during Google login. Please try again.');
