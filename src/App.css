@@ -1,0 +1,243 @@
+@import './components/HomePage.css';
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* Theme variables */
+  --primary-color: #4361ee;
+  --primary-dark: #3a56d4;
+  --card-bg: #ffffff;
+  --background-color: #f8f9fa;
+  --text-color: #212529;
+  --text-secondary: #6c757d;
+  --text-on-primary: #ffffff;
+  --border-color: #dee2e6;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --border-radius-sm: 0.25rem;
+  --transition: all 0.3s ease;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Layout styles for app with sidebar */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 250px;
+  transition: margin-left 0.3s ease;
+  padding: 20px;
+  width: calc(100% - 250px); /* Ensure proper width calculation */
+}
+
+.main-content.collapsed {
+  margin-left: 70px;
+  width: calc(100% - 70px); /* Adjust width when sidebar is collapsed */
+}
+
+/* Mobile adjustments - fix overlap issue */
+@media (max-width: 768px) {
+  .app-layout {
+    position: relative;
+  }
+  
+  .sidebar {
+    position: fixed;
+    z-index: 999;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    width: 250px;
+    transform: translateX(-100%); /* Hide sidebar off-screen initially */
+    transition: transform 0.3s ease;
+  }
+  
+  /* When sidebar is not collapsed on mobile, show it fully */
+  .sidebar:not(.collapsed) {
+    transform: translateX(0); /* Show full sidebar */
+  }
+  
+  /* Adjust main content */
+  .main-content {
+    margin-left: 0;
+    padding: 10px;
+    width: 100%;
+    transition: transform 0.3s ease;
+  }
+  
+  /* When sidebar is open on mobile, we'll handle this via JavaScript classes */
+  .main-content.sidebar-open {
+    transform: translateX(0); /* For now, no transform - sidebar overlays */
+  }
+}
+
+/* Ensure toggle button appears in main content for mobile */
+.main-content {
+  position: relative;
+}
+
+.main-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: var(--card-bg);
+  z-index: 998;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .main-content::before {
+    display: block;
+  }
+  
+  .main-content {
+    padding-top: 70px !important; /* Make room for the header */
+  }
+  
+  .mobile-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: var(--card-bg);
+    z-index: 998;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  
+  .mobile-toggle {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: var(--transition);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .mobile-toggle:hover {
+    background-color: var(--gray-200);
+  }
+  
+  .mobile-header-title {
+    margin-left: 15px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+    flex: 1;
+  }
+}
+
+/* Dark theme overrides */
+[data-theme='dark'] {
+  --card-bg: #1f1f1f;
+  --background-color: #121212;
+  --text-color: #ddd;
+  --text-secondary: #aaa;
+  --text-on-primary: #ffffff;
+  --border-color: #333;
+  --gray-200: #333;
+  --gray-300: #444;
+  --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='dark'] :root {
+  color: #ddd;
+  background-color: #121212;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: 10px;
+  }
+  
+  .main-content.collapsed {
+    margin-left: 0;
+  }
+}
