@@ -3,7 +3,7 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import { handleGoogleCallback } from '../utils/GoogleAuth';
 import Navbar from '../Navbar';
-import { makeApiRequest, getApiBaseUrl } from '../utils/api';
+import { makeApiRequest, getApiBaseUrl } from '../../utils/api';
 import './Auth.css';
 
 const Login = () => {

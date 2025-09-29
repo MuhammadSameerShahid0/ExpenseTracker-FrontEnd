@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { makeApiRequest } from '../utils/api';
+import { makeApiRequest } from '../../utils/api';
 import './Auth.css';
 
 const Profile = () => {
