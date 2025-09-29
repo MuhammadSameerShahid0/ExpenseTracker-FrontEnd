@@ -39,7 +39,7 @@ const ExpensesList = () => {
       const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
         ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
       
       const response = await fetch(`${apiBaseUrl}/api/expenses`, {
         method: 'GET',
@@ -73,7 +73,7 @@ const ExpensesList = () => {
       const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
         ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
       
       const response = await fetch(`${apiBaseUrl}/api/categories`, {
         method: 'GET',
@@ -139,7 +139,7 @@ const ExpensesList = () => {
       const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
         ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
       
       const response = await fetch(`${apiBaseUrl}/api/delete_expense_list_item?transaction_id=${selectedExpense}`, {
         method: 'DELETE',
@@ -234,7 +234,7 @@ const ExpensesList = () => {
       const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
         ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
       
       const response = await fetch(`${apiBaseUrl}/api/edit_expense_list`, {
         method: 'POST',  // Changed from PUT to POST to match backend

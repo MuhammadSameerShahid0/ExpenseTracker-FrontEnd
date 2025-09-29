@@ -47,7 +47,7 @@ const AccountSettings = () => {
       const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
         ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
       
       const response = await fetch(`${apiBaseUrl}/api/user_details`, {
         method: 'GET',
@@ -116,7 +116,7 @@ const AccountSettings = () => {
         const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         const apiBaseUrl = isDevelopment 
           ? 'http://localhost:8000'  // Local development backend
-          : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+          : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
         
         const response = await fetch(`${apiBaseUrl}/api/change-password`, {
           method: 'POST',
@@ -150,7 +150,7 @@ const AccountSettings = () => {
         const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         const apiBaseUrl = isDevelopment 
           ? 'http://localhost:8000'  // Local development backend
-          : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+          : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
         
         const response = await fetch(`${apiBaseUrl}/api/change-password`, {
           method: 'POST',
@@ -182,7 +182,7 @@ const AccountSettings = () => {
       const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
         ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
       
       const response = await fetch(`${apiBaseUrl}/api/2fa_enable`, {
         method: 'POST',
@@ -214,7 +214,7 @@ const AccountSettings = () => {
       const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
         ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
       
       const response = await fetch(`${apiBaseUrl}/api/2fa_disable`, {
         method: 'POST',
@@ -264,7 +264,7 @@ const AccountSettings = () => {
       const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
         ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
       
       const response = await fetch(`${apiBaseUrl}/api/verify_2fa?code=${verificationCode}`, {
         method: 'GET',
@@ -303,7 +303,7 @@ const AccountSettings = () => {
         const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         const apiBaseUrl = isDevelopment 
           ? 'http://localhost:8000'  // Local development backend
-          : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+          : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
         
         const response = await fetch(`${apiBaseUrl}/api/delete-account`, {
           method: 'DELETE',
@@ -342,7 +342,7 @@ const AccountSettings = () => {
       const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
         ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
       
       const response = await fetch(`${apiBaseUrl}/api/auth_logging`, {
         method: 'GET',
@@ -380,7 +380,7 @@ const AccountSettings = () => {
       const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
         ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
       
       const response = await fetch(`${apiBaseUrl}/api/return_selected_logging`, {
         method: 'GET',

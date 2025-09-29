@@ -77,7 +77,7 @@ const Dashboard = () => {
       const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
         ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
       
       const response = await fetch(`${apiBaseUrl}/api/verify-token`, {
         method: "POST",
@@ -128,7 +128,7 @@ const Dashboard = () => {
       const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
         ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
       
       const res = await fetch(`${apiBaseUrl}/api/total_amount`, {
         method: "GET",
@@ -154,7 +154,7 @@ const fetchTransactions = async (token) => {
     const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     const apiBaseUrl = isDevelopment 
       ? 'http://localhost:8000'  // Local development backend
-      : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+      : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
     
     const res = await fetch(`${apiBaseUrl}/api/expenses`, {
       method: "GET",
@@ -180,7 +180,7 @@ const fetchTransactions = async (token) => {
       const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
         ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
       
       const res = await fetch(`${apiBaseUrl}/api/total_transactions`, {
         method: "GET",
@@ -206,7 +206,7 @@ const fetchTransactions = async (token) => {
       const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
         ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
       
       const res = await fetch(`${apiBaseUrl}/api/recent_transactions?limit=6`, {
         method: "GET",
@@ -232,7 +232,7 @@ const fetchTransactions = async (token) => {
       const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
         ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
       
       const res = await fetch(`${apiBaseUrl}/api/categories`, {
         method: "GET",
@@ -260,7 +260,7 @@ const fetchTransactions = async (token) => {
       const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
         ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
 
       const expenseRes = await fetch(
         `${apiBaseUrl}/api/monthly_total?year=${year}&month=${formattedMonth}`,
@@ -311,7 +311,7 @@ const fetchTransactions = async (token) => {
       const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
         ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
       
       const response = await fetch(`${apiBaseUrl}/api/total-set-budget-amount-according-to-month?month=${month}`, {
         method: "GET",
@@ -369,7 +369,7 @@ const fetchTransactions = async (token) => {
       const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isDevelopment 
         ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-fast-api.vercel.app'; // Production backend
+        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
       
       const res = await fetch(`${apiBaseUrl}/api/categories`, {
         method: "POST",

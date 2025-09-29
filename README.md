@@ -35,6 +35,7 @@ Before you begin, ensure you have the following installed:
 ## Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd expense-tracker
@@ -48,11 +49,13 @@ Before you begin, ensure you have the following installed:
 ## Getting Started
 
 1. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 2. **Start the development server**
+
    ```bash
    npm run dev
    ```
@@ -128,28 +131,33 @@ expense-tracker/
 ## Features
 
 ### Authentication
+
 - User registration with validation
 - Secure login system
 - Profile management
 - Account settings and reactivation
 
 ### Expense Management
+
 - Add new expenses with description, category, amount, and payment method
 - View and filter expenses by various criteria
 - Categorize expenses for better tracking
 
 ### Budget Tracking
+
 - Set monthly budgets
 - Track spending against budget limits
 - Visual indicators for budget status
 
 ### Reporting
+
 - Generate detailed expense reports
 - Filter reports by date range, category, payment method, and amount
 - Export reports to PDF format
 - View report summaries with totals and transaction counts
 
 ### Responsive Design
+
 - Mobile-first responsive design
 - Adapts to different screen sizes
 - Touch-friendly interface
@@ -159,7 +167,7 @@ expense-tracker/
 The application connects to a backend API with the following base URLs:
 
 - **Development**: `http://localhost:8000`
-- **Production**: `https://expense-tracker-fast-api.vercel.app`
+- **Production**: `https://expense-tracker-python-fast-api.vercel.app`
 
 The application automatically detects the environment and uses the appropriate API endpoint.
 
