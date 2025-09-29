@@ -1,16 +1,73 @@
 # Expense Tracker
 
-A comprehensive expense tracking application built with React and Vite. This application allows users to manage their finances by adding expenses, tracking budgets, generating reports, and monitoring their spending habits.
+A comprehensive expense tracking application built with React and Vite. This application allows users to manage their personal finances by tracking expenses, setting budgets, generating reports, and managing their account settings.
 
-## Features
+## 🚀 Features
 
 - **User Authentication**: Secure login and registration system
-- **Expense Management**: Add, view, and manage your expenses
-- **Budget Tracking**: Set and monitor your monthly budgets
-- **Reporting**: Generate detailed reports and visualizations
-- **Dashboard**: Overview of spending patterns and financial statistics
-- **PDF Export**: Export reports as PDF documents
-- **Responsive Design**: Works on desktop and mobile devices
+- **Expense Management**: Add, view, and categorize expenses
+- **Budget Tracking**: Set and monitor spending limits
+- **Detailed Reports**: Generate expense reports with filtering options and PDF export
+- **Responsive Design**: Works seamlessly across devices
+- **Account Management**: User profile and account settings
+
+## 📋 Table of Contents
+
+- [Installation](#installation)
+- [Prerequisites](#prerequisites)
+- [Getting Started](#getting-started)
+- [Available Scripts](#available-scripts)
+- [Project Structure](#project-structure)
+- [Dependencies](#dependencies)
+- [Environment Setup](#environment-setup)
+- [Features](#features-1)
+- [API Integration](#api-integration)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- [Node.js](https://nodejs.org/) (version 16 or higher)
+- npm (comes with Node.js) or [Yarn](https://yarnpkg.com/)
+
+## Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd expense-tracker
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+## Getting Started
+
+1. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+2. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+3. **Open your browser**
+   Navigate to [http://localhost:5173](http://localhost:5173) to view the application
+
+## Available Scripts
+
+In the project directory, you can run:
+
+- `npm run dev` - Starts the development server
+- `npm run build` - Builds the application for production
+- `npm run preview` - Locally preview the production build
+- `npm run lint` - Checks code for linting errors
 
 ## Project Structure
 
@@ -22,12 +79,12 @@ expense-tracker/
 │   ├── assets/
 │   ├── components/
 │   │   ├── auth/
-│   │   │   ├── Login.jsx
-│   │   │   ├── Register.jsx
 │   │   │   ├── AccountReactivation.jsx
 │   │   │   ├── AccountSettings.jsx
+│   │   │   ├── AuthContext.jsx
+│   │   │   ├── Login.jsx
 │   │   │   ├── Profile.jsx
-│   │   │   └── AuthContext.jsx
+│   │   │   └── Register.jsx
 │   │   ├── utils/
 │   │   ├── AddExpense.jsx
 │   │   ├── BudgetModal.jsx
@@ -49,89 +106,70 @@ expense-tracker/
 └── README.md
 ```
 
-## Technologies Used
-
-- **React** (v19.1.1)
-- **Vite** (v7.1.2) - Next Generation Frontend Tooling
-- **React Router DOM** (v7.9.1) - Declarative routing for React
-- **React Calendar** (v6.0.0) - Calendar component for date selection
-- **jsPDF** (v3.0.3) - PDF generation library
-- **jsPDF Autotable** (v5.0.2) - Create PDF tables
-- **ESLint** - Linting utility for JavaScript and JSX
-
-## Prerequisites
-
-Make sure you have Node.js installed on your system. You can download it from [nodejs.org](https://nodejs.org/).
-
-## Installation
-
-1. **Clone the repository** (if applicable):
-   ```bash
-   git clone <repository-url>
-   cd expense-tracker
-   ```
-
-2. **Install dependencies**:
-   ```bash
-   npm install
-   ```
-
-## Development
-
-To run the application in development mode:
-
-```bash
-npm run dev
-```
-
-This will start the development server. Open [http://localhost:5173](http://localhost:5173) in your browser to view the application.
-
-## Building for Production
-
-To create a production build:
-
-```bash
-npm run build
-```
-
-This command bundles the application for deployment. The built files will be placed in the `dist` directory.
-
-## Available Scripts
-
-- `npm run dev` - Starts the development server
-- `npm run build` - Builds the application for production
-- `npm run lint` - Runs ESLint to check for code issues
-- `npm run preview` - Locally preview the production build
-
 ## Dependencies
 
-### Production Dependencies
-- `react`: ^19.1.1
-- `react-dom`: ^19.1.1
-- `react-router-dom`: ^7.9.1
-- `react-calendar`: ^6.0.0
-- `jspdf`: ^3.0.3
-- `jspdf-autotable`: ^5.0.2
+### Core Dependencies
+
+- **React**: JavaScript library for building user interfaces
+- **React DOM**: React package for DOM-specific methods
+- **React Router DOM**: Declarative routing for React
+- **React Calendar**: Calendar component for date selection
+- **jsPDF**: Client-side JavaScript PDF generation
+- **jsPDF Autotable**: Plugin for jsPDF to create tables
 
 ### Development Dependencies
-- `@vitejs/plugin-react`: ^5.0.0
-- `@eslint/js`: ^9.33.0
-- `@types/react`: ^19.1.10
-- `@types/react-dom`: ^19.1.7
-- `eslint`: ^9.33.0
-- `eslint-plugin-react-hooks`: ^5.2.0
-- `eslint-plugin-react-refresh`: ^0.4.20
-- `globals`: ^16.3.0
-- `vite`: ^7.1.2
+
+- **Vite**: Next generation frontend build tool
+- **@vitejs/plugin-react**: Official React plugin for Vite
+- **ESLint**: JavaScript linter
+- **@types/react**: TypeScript definitions for React
+- **@types/react-dom**: TypeScript definitions for React DOM
+
+## Features
+
+### Authentication
+- User registration with validation
+- Secure login system
+- Profile management
+- Account settings and reactivation
+
+### Expense Management
+- Add new expenses with description, category, amount, and payment method
+- View and filter expenses by various criteria
+- Categorize expenses for better tracking
+
+### Budget Tracking
+- Set monthly budgets
+- Track spending against budget limits
+- Visual indicators for budget status
+
+### Reporting
+- Generate detailed expense reports
+- Filter reports by date range, category, payment method, and amount
+- Export reports to PDF format
+- View report summaries with totals and transaction counts
+
+### Responsive Design
+- Mobile-first responsive design
+- Adapts to different screen sizes
+- Touch-friendly interface
+
+## API Integration
+
+The application connects to a backend API with the following base URLs:
+
+- **Development**: `http://localhost:8000`
+- **Production**: `https://expense-tracker-fast-api.vercel.app`
+
+The application automatically detects the environment and uses the appropriate API endpoint.
 
 ## Contributing
 
 1. Fork the repository
-2. Create a new branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Commit your changes (`git commit -m 'Add some amazing feature'`)
-5. Push to the branch (`git push origin feature/amazing-feature`)
-6. Open a Pull Request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -am 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
