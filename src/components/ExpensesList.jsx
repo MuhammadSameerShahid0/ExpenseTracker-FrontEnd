@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { makeApiRequest } from '../utils/api';
 import './Dashboard.css';
 import './ExpensesList.css';
 
@@ -35,17 +36,10 @@ const ExpensesList = () => {
 
   const fetchExpenses = async (token) => {
     try {
-      // Determine the API base URL based on the environment
-      const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const apiBaseUrl = isDevelopment 
-        ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
-      
-      const response = await fetch(`${apiBaseUrl}/api/expenses`, {
+      const response = await makeApiRequest('/api/expenses', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
         },
       });
 
@@ -69,17 +63,10 @@ const ExpensesList = () => {
 
   const fetchCategories = async (token) => {
     try {
-      // Determine the API base URL based on the environment
-      const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const apiBaseUrl = isDevelopment 
-        ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
-      
-      const response = await fetch(`${apiBaseUrl}/api/categories`, {
+      const response = await makeApiRequest('/api/categories', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
         },
       });
 
@@ -135,17 +122,10 @@ const ExpensesList = () => {
     if (!selectedExpense) return;
     
     try {
-      // Determine the API base URL based on the environment
-      const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const apiBaseUrl = isDevelopment 
-        ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
-      
-      const response = await fetch(`${apiBaseUrl}/api/delete_expense_list_item?transaction_id=${selectedExpense}`, {
+      const response = await makeApiRequest(`/api/delete_expense_list_item?transaction_id=${selectedExpense}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json',
         },
       });
 
@@ -230,17 +210,10 @@ const ExpensesList = () => {
         datetime: updatedExpense.date // This should be in ISO format for datetime
       };
       
-      // Determine the API base URL based on the environment
-      const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const apiBaseUrl = isDevelopment 
-        ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
-      
-      const response = await fetch(`${apiBaseUrl}/api/edit_expense_list`, {
+      const response = await makeApiRequest('/api/edit_expense_list', {
         method: 'POST',  // Changed from PUT to POST to match backend
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json',
         },
         body: JSON.stringify(requestBody)
       });

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { makeApiRequest } from '../../utils/api';
 
 const AuthContext = createContext();
 
@@ -58,17 +59,10 @@ export const AuthProvider = ({ children }) => {
 
   const verifyToken = async (token) => {
     try {
-      // Determine the API base URL based on the environment
-      const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const apiBaseUrl = isDevelopment 
-        ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
-      
-      const response = await fetch(`${apiBaseUrl}/api/verify-token`, {
+      const response = await makeApiRequest('/api/verify-token', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
         },
         credentials: 'include'
       });

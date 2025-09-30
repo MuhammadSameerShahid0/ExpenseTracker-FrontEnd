@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Navbar from '../Navbar';
+import { makeApiRequest } from '../../utils/api';
 import './Auth.css';
 import './AccountReactivation.css';
 
@@ -39,13 +40,7 @@ const AccountReactivation = () => {
     }
 
     try {
-      // Determine the API base URL based on the environment
-      const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const apiBaseUrl = isDevelopment 
-        ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
-
-      const response = await fetch(`${apiBaseUrl}/api/re-active-account?email=${encodeURIComponent(formData.email)}`, {
+      const response = await makeApiRequest(`/api/re-active-account?email=${encodeURIComponent(formData.email)}`, {
         method: 'POST'
       });
 
@@ -78,13 +73,7 @@ const AccountReactivation = () => {
     }
 
     try {
-      // Determine the API base URL based on the environment
-      const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const apiBaseUrl = isDevelopment 
-        ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
-
-      const response = await fetch(`${apiBaseUrl}/api/re-active-account-verification-email-code?code=${formData.code}`, {
+      const response = await makeApiRequest(`/api/re-active-account-verification-email-code?code=${formData.code}`, {
         method: 'POST'
       });
 

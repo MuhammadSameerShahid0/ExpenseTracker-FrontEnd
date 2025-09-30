@@ -3,6 +3,7 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import { handleGoogleCallback } from '../utils/GoogleAuth';
 import Navbar from "../Navbar";
+import { makeApiRequest } from '../../utils/api';
 import "./Auth.css";
 
 const Register = () => {
@@ -48,11 +49,10 @@ const Register = () => {
       // Try to verify the token and get user info using the auth context
       const verifyTokenAndLogin = async () => {
         try {
-          const response = await fetch('/api/verify-token', {
+          const response = await makeApiRequest('/api/verify-token', {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
             },
             credentials: 'include'
           });
@@ -116,9 +116,8 @@ const Register = () => {
 
     try {
       const { confirmPassword, ...registrationData } = formData;
-      const response = await fetch("/api/register", {
+      const response = await makeApiRequest("/api/register", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(registrationData),
         credentials: "include",
       });
@@ -165,7 +164,7 @@ const Register = () => {
     setError("");
 
     try {
-      const response = await fetch(
+      const response = await makeApiRequest(
         `/api/RegistrationVerificationEmailCodeAnd2FAOtp?code=${verificationData.emailCode}&otp=${verificationData.totp}`,
         { method: "GET", credentials: "include" }
       );
@@ -195,7 +194,7 @@ const Register = () => {
     setError("");
 
     try {
-      const response = await fetch(`/api/re-active-account?email=${encodeURIComponent(formData.email)}`, {
+      const response = await makeApiRequest(`/api/re-active-account?email=${encodeURIComponent(formData.email)}`, {
         method: "POST"
       });
 
@@ -220,7 +219,7 @@ const Register = () => {
     setError("");
 
     try {
-      const response = await fetch(`/api/re-active-account-verification-email-code?code=${reactivationCode}`, {
+      const response = await makeApiRequest(`/api/re-active-account-verification-email-code?code=${reactivationCode}`, {
         method: "POST"
       });
 

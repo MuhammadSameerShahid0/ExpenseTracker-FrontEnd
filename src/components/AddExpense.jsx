@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { makeApiRequest } from '../utils/api';
 import './AddExpense.css';
 
 const AddExpense = () => {
@@ -32,17 +33,10 @@ const AddExpense = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        // Determine the API base URL based on the environment
-        const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        const apiBaseUrl = isDevelopment 
-          ? 'http://localhost:8000'  // Local development backend
-          : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
-        
-        const res = await fetch(`${apiBaseUrl}/api/categories`, {
+        const res = await makeApiRequest('/api/categories', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json',
           },
         });
         if (res.ok) {
@@ -66,17 +60,11 @@ const AddExpense = () => {
 
     try {
       const token = localStorage.getItem('token');
-      // Determine the API base URL based on the environment
-      const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const apiBaseUrl = isDevelopment 
-        ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
       
-      const res = await fetch(`${apiBaseUrl}/api/expenses`, {
+      const res = await makeApiRequest('/api/expenses', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           amount: parseFloat(amount),
@@ -110,17 +98,10 @@ const AddExpense = () => {
   const handleAddCategory = async () => {
     if (!newCategory.trim()) return;
     try {
-      // Determine the API base URL based on the environment
-      const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const apiBaseUrl = isDevelopment 
-        ? 'http://localhost:8000'  // Local development backend
-        : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
-      
-      const res = await fetch(`${apiBaseUrl}/api/categories`, {
+      const res = await makeApiRequest('/api/categories', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ name: newCategory, type: 'expense' }),
       });

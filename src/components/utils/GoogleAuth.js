@@ -1,12 +1,5 @@
 // GoogleAuth.js - Utility functions for Google OAuth operations
-
-// Function to determine the API base URL based on the environment
-const getApiBaseUrl = () => {
-  const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  return isDevelopment 
-    ? 'http://localhost:8000'  // Local development backend
-    : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
-};
+import { getApiBaseUrl } from '../../utils/api';
 
 // Function to initialize Google registration
 export const initiateGoogleRegistration = () => {

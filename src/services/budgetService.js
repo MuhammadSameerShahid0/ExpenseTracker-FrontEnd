@@ -1,19 +1,14 @@
-// Determine the API base URL based on the environment
-const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const API_BASE_URL = isDevelopment 
-  ? 'http://localhost:8000'  // Local development backend
-  : 'https://expense-tracker-python-fast-api.vercel.app'; // Production backend
+import { makeApiRequest } from '../utils/api';
 
 export const budgetService = {
   // Add a new budget
   async addBudget(limit, categoryId) {
     const token = localStorage.getItem('token');
     
-    const response = await fetch(`${API_BASE_URL}/api/add-budget`, {
+    const response = await makeApiRequest('/api/add-budget', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         limit: limit,
@@ -33,11 +28,10 @@ export const budgetService = {
   async getBudgets() {
     const token = localStorage.getItem('token');
     
-    const response = await fetch(`${API_BASE_URL}/api/budgets`, {
+    const response = await makeApiRequest('/api/budgets', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
       }
     });
 
@@ -53,11 +47,10 @@ export const budgetService = {
   async getCategories() {
     const token = localStorage.getItem('token');
     
-    const response = await fetch(`${API_BASE_URL}/api/categories`, {
+    const response = await makeApiRequest('/api/categories', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
       }
     });
 
@@ -73,11 +66,10 @@ export const budgetService = {
   async getTotalBudgetAmountForMonth(month) {
     const token = localStorage.getItem('token');
     
-    const response = await fetch(`${API_BASE_URL}/api/total-set-budget-amount-according-to-month?month=${month}`, {
+    const response = await makeApiRequest(`/api/total-set-budget-amount-according-to-month?month=${month}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
       }
     });
 
@@ -93,11 +85,10 @@ export const budgetService = {
   async editBudgetAmount(categoryId, amount) {
     const token = localStorage.getItem('token');
     
-    const response = await fetch(`${API_BASE_URL}/api/Edit_budget_amount`, {
+    const response = await makeApiRequest('/api/Edit_budget_amount', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         category_id: categoryId,
@@ -117,11 +108,10 @@ export const budgetService = {
   async deleteBudget(categoryId) {
     const token = localStorage.getItem('token');
     
-    const response = await fetch(`${API_BASE_URL}/api/delete_set_budget?category_id=${categoryId}`, {        
+    const response = await makeApiRequest(`/api/delete_set_budget?category_id=${categoryId}`, {        
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
       }
     });
 
