@@ -13,7 +13,9 @@ export const makeApiRequest = async (endpoint, options = {}) => {
   const defaultOptions = {
     headers: {
       'Content-Type': 'application/json',
-    }
+    },
+    credentials: 'include', // Important for cookies/sessions
+    mode: 'cors' // Explicitly set CORS mode
   };
   
   const requestOptions = {
@@ -25,6 +27,19 @@ export const makeApiRequest = async (endpoint, options = {}) => {
     }
   };
   
-  const response = await fetch(url, requestOptions);
-  return response;
+   try {
+    const response = await fetch(url, requestOptions);
+    
+    // Handle CORS errors
+    if (response.type === 'opaque' || response.status === 0) {
+      throw new Error('CORS error: Unable to connect to server');
+    }
+    
+    return response;
+  } catch (error) {
+    if (error.message.includes('CORS') || error.message.includes('Failed to fetch')) {
+      throw new Error('CORS error: Unable to connect to server. Please check your network connection.');
+    }
+    throw error;
+  }
 };
