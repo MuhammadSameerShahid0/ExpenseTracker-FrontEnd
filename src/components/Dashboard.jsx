@@ -24,6 +24,9 @@ const Dashboard = () => {
   const [totalBudget, setTotalBudget] = useState(0);
   const [showBudgetModal, setShowBudgetModal] = useState(false);
   const [budgetModalTab, setBudgetModalTab] = useState('add'); // Default to 'add'
+  const [monthlyIncome, setMonthlyIncome] = useState(0); // For financial dashboard
+  const [savings, setSavings] = useState(0); // For financial dashboard
+  const [expenseTrend, setExpenseTrend] = useState([]); // For trend analysis
 
   const navigate = useNavigate();
 
@@ -44,6 +47,26 @@ const Dashboard = () => {
     acc[catName] = (acc[catName] || 0) + tx.amount;
     return acc;
   }, {});
+
+  // Calculate financial metrics
+  const calculateSavings = () => {
+    return monthlyIncome - monthlyExpenses;
+  };
+
+  // Calculate expense trend (for simple trend analysis)
+  useEffect(() => {
+    if (transactions.length > 0) {
+      // Get the 5 most recent transactions for trend analysis
+      const recentTransactions = [...transactions].sort((a, b) => 
+        new Date(b.date) - new Date(a.date)
+      ).slice(0, 5);
+      
+      setExpenseTrend(recentTransactions);
+    }
+  }, [transactions]);
+
+  // Calculate budget utilization percentage
+  const budgetUtilization = totalBudget > 0 ? (monthlyExpenses / totalBudget) * 100 : 0;
 
   // ✅ Build pie chart data using categories + transaction totals
   const pieChartData = categories.map((cat, index) => {
@@ -135,23 +158,23 @@ const Dashboard = () => {
   };
 
   // ✅ Fetch all transactions
-const fetchTransactions = async (token) => {
-  try {
-    const res = await makeApiRequest('/api/expenses', {
-      method: "GET",
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
+  const fetchTransactions = async (token) => {
+    try {
+      const res = await makeApiRequest('/api/expenses', {
+        method: "GET",
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
 
-    if (res.ok) {
-      const data = await res.json();
-      setTransactions(data);
+      if (res.ok) {
+        const data = await res.json();
+        setTransactions(data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch transactions:", err);
     }
-  } catch (err) {
-    console.error("Failed to fetch transactions:", err);
-  }
-};
+  };
 
   // ✅ Fetch total transactions
   const fetchTransactionsCount = async (token) => {
@@ -460,14 +483,14 @@ const fetchTransactions = async (token) => {
         <div className="dashboard-stats">
           <div className="stat-card">
             <h3>
-              PKR <span style={{ color: "red" }}>{totalExpenses.toFixed(2)}</span>
+              PKR <span style={{ color: "#4361ee" }}>{totalExpenses.toFixed(2)}</span>
             </h3>
             <p>Total Spent Amount</p>
           </div>
 
           <div className="stat-card">
             <h3>
-              PKR <span style={{ color: "red" }}>{monthlyExpenses.toFixed(2)}</span>
+              PKR <span style={{ color: "#4361ee" }}>{monthlyExpenses.toFixed(2)}</span>
             </h3>
             <div className="month-selector-container">
               <div
@@ -486,7 +509,7 @@ const fetchTransactions = async (token) => {
 
           <div className="stat-card">
             <h3>
-              PKR <span style={{ color: "blue" }}>{totalBudget.toFixed(2)}</span>
+              PKR <span style={{ color: "#28a745" }}>{totalBudget.toFixed(2)}</span>
             </h3>
             <div className="month-selector-container budget-controls">
               <button 
@@ -527,6 +550,130 @@ const fetchTransactions = async (token) => {
           <div className="stat-card">
             <h3>{totalTransactions}</h3>
             <p>Transactions</p>
+          </div>
+        </div>
+
+        {/* Financial Insights Section */}
+        <div className="financial-insights">
+          <div className="insight-card">
+            <h3>Monthly Budget Utilization</h3>
+            <div className="budget-utilization-bar">
+              <div 
+                className="budget-progress"
+                style={{ 
+                  width: `${Math.min(budgetUtilization, 100)}%`,
+                  backgroundColor: budgetUtilization > 90 ? '#dc3545' : budgetUtilization > 75 ? '#ffc107' : '#28a745'
+                }}
+              ></div>
+            </div>
+            <p className="budget-percentage">{budgetUtilization.toFixed(1)}% of budget used</p>
+          </div>
+          
+          <div className="insight-card">
+            <h3>Financial Health</h3>
+            <div className="financial-health">
+              <div className="health-indicator">
+                {monthlyExpenses < totalBudget * 0.5 ? (
+                  <span className="health-status good">🟢 Excellent</span>
+                ) : monthlyExpenses < totalBudget ? (
+                  <span className="health-status fair">🟡 Good</span>
+                ) : (
+                  <span className="health-status poor">🔴 Needs Attention</span>
+                )}
+              </div>
+              <p>Based on budget utilization</p>
+            </div>
+          </div>
+          
+          <div className="insight-card">
+            <h3>Top Expense Category</h3>
+            <div className="top-category">
+              {pieChartData.length > 0 ? (
+                <>
+                  <span className="category-name">{pieChartData[0].name}</span>
+                  <span className="category-percentage">{pieChartData[0].percentage.toFixed(1)}%</span>
+                </>
+              ) : (
+                <span className="no-data">No data available</span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Additional Financial Summary */}
+        <div className="financial-summary">
+          <div className="summary-card">
+            <h3>Spending Trend</h3>
+            <div className="trend-chart">
+              {expenseTrend.length > 0 ? (
+                <div className="trend-visualization">
+                  {expenseTrend.slice(0, 5).map((expense, index) => (
+                    <div key={index} className="trend-bar" title={`PKR ${expense.amount.toFixed(2)}`}>
+                      <div 
+                        className="trend-bar-fill" 
+                        style={{ height: `${(expense.amount / Math.max(...expenseTrend.map(e => e.amount)) * 100)}%` }}
+                      ></div>
+                      <div className="trend-label">
+                        {new Date(expense.date).toLocaleDateString("en-US", { day: "numeric", month: "short" })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="no-data">No trend data available</p>
+              )}
+            </div>
+          </div>
+
+          <div className="summary-card">
+            <h3>Savings Projection</h3>
+            <div className="savings-info">
+              <div className="savings-amount">
+                <span className="savings-value">
+                  PKR {(monthlyIncome - monthlyExpenses).toFixed(2)}
+                </span>
+                <span className="savings-label">
+                  monthly savings
+                </span>
+              </div>
+              <div className="savings-percentage">
+                <span className="percentage-value">
+                  {monthlyIncome > 0 ? ((monthlyIncome - monthlyExpenses) / monthlyIncome * 100).toFixed(1) : 0}%
+                </span>
+                <span className="percentage-label">
+                  of income saved
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="summary-card">
+            <h3>Spending vs Budget</h3>
+            <div className="comparison-chart">
+              <div className="comparison-item">
+                <div className="comparison-label">Budget</div>
+                <div className="comparison-value">PKR {totalBudget.toFixed(2)}</div>
+                <div className="comparison-bar">
+                  <div 
+                    className="comparison-progress" 
+                    style={{ width: "100%", backgroundColor: "#28a745" }}
+                  ></div>
+                </div>
+              </div>
+              <div className="comparison-item">
+                <div className="comparison-label">Spent</div>
+                <div className="comparison-value">PKR {monthlyExpenses.toFixed(2)}</div>
+                <div className="comparison-bar">
+                  <div 
+                    className="comparison-progress" 
+                    style={{ 
+                      width: totalBudget > 0 ? `${Math.min((monthlyExpenses / totalBudget) * 100, 100)}%` : "0%", 
+                      backgroundColor: monthlyExpenses > totalBudget ? "#dc3545" : "#4361ee"
+                    }}
+                  ></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
