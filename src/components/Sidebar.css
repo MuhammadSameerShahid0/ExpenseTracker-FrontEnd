@@ -151,7 +151,6 @@
 
 [data-theme='dark'] .nav-link {
   color: #cbd5e1;
-  background: rgba(255, 255, 255, 0.05);
 }
 
 [data-theme='dark'] .nav-link:hover {
@@ -284,25 +283,19 @@
 }
 
 .settings-icon {
-  font-size: 1.3rem;
   width: 40px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(67, 97, 238, 0.2), rgba(58, 86, 212, 0.2));
-  color: #1e293b;
+  background: linear-gradient(135deg, var(--primary-color, #4361ee), var(--primary-dark, #3a56d4));
+  color: white;
   flex-shrink: 0;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-[data-theme='dark'] .settings-icon {
-  background: linear-gradient(135deg, rgba(129, 140, 248, 0.2), rgba(96, 165, 250, 0.2));
-  color: #e2e8f0;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+.settings-icon:hover {
+  background: linear-gradient(135deg, var(--primary-dark, #3a56d4), var(--primary-color, #4361ee));
 }
 
 .settings-info {

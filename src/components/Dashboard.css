@@ -630,6 +630,12 @@
   }
 }
 
+/* Negative value styling */
+.negative {
+  color: #dc3545 !important; /* Bootstrap danger red */
+}
+
+
 /* Modern Transactions List */
 .transactions-list-modern {
   display: flex;
@@ -1272,6 +1278,11 @@
 [data-theme='dark'] .transaction-category {
   background: rgba(67, 97, 238, 0.15);
   color: #818cf8;
+}
+
+[data-theme='dark'] .savings-value.negative,
+[data-theme='dark'] .percentage-value.negative {
+  color: #f87171; /* Red for negative values */
 }
 
 [data-theme='dark'] .transaction-date {

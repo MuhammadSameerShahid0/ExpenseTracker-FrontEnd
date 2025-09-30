@@ -629,19 +629,19 @@ const Dashboard = () => {
             <h3>Savings Projection</h3>
             <div className="savings-info">
               <div className="savings-amount">
-                <span className="savings-value">
-                  PKR {(monthlyIncome - monthlyExpenses).toFixed(2)}
+                <span className={`savings-value ${totalBudget - monthlyExpenses < 0 ? 'negative' : ''}`}>
+                  PKR {(totalBudget - monthlyExpenses).toFixed(2)}
                 </span>
                 <span className="savings-label">
-                  monthly savings
+                  remaining in budget
                 </span>
               </div>
               <div className="savings-percentage">
-                <span className="percentage-value">
-                  {monthlyIncome > 0 ? ((monthlyIncome - monthlyExpenses) / monthlyIncome * 100).toFixed(1) : 0}%
+                <span className={`percentage-value ${totalBudget - monthlyExpenses < 0 ? 'negative' : ''}`}>
+                  {totalBudget > 0 ? ((totalBudget - monthlyExpenses) / totalBudget * 100).toFixed(1) : 0}%
                 </span>
                 <span className="percentage-label">
-                  of income saved
+                  of budget remaining
                 </span>
               </div>
             </div>
