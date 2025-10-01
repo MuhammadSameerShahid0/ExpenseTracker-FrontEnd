@@ -44,6 +44,9 @@ const BudgetModal = ({ isOpen, onClose, initialTab = 'add' }) => {
   const [deleteError, setDeleteError] = useState('');
   const [deleteSuccess, setDeleteSuccess] = useState('');
 
+  // State for category dropdown
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const budgetsPerPage = 2;
@@ -60,6 +63,20 @@ const BudgetModal = ({ isOpen, onClose, initialTab = 'add' }) => {
       return () => clearTimeout(timer);
     }
   }, [error, success]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showCategoryDropdown && !event.target.closest('.custom-select-container')) {
+        setShowCategoryDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showCategoryDropdown]);
 
   // Load categories and budgets when modal opens
   useEffect(() => {
@@ -304,20 +321,44 @@ const BudgetModal = ({ isOpen, onClose, initialTab = 'add' }) => {
             <form onSubmit={handleAddBudget} className="budget-form">
               <div className="form-group">
                 <label htmlFor="categoryId">Category</label>
-                <select
-                  id="categoryId"
-                  name="categoryId"
-                  value={formData.categoryId}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Select a category</option>
-                  {categories.map(category => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
+                <div className="custom-select-container">
+                  <div 
+                    className={`custom-select ${showCategoryDropdown ? 'open' : ''}`}
+                    onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
+                  >
+                    <span className="selected-value">
+                      {formData.categoryId 
+                        ? categories.find(cat => cat.id === parseInt(formData.categoryId))?.name 
+                        : "Select a category"}
+                    </span>
+                    <span className={`dropdown-arrow ${showCategoryDropdown ? 'open' : ''}`}>▼</span>
+                  </div>
+                  {showCategoryDropdown && (
+                    <div className="custom-options">
+                      <div 
+                        className="custom-option"
+                        onClick={() => {
+                          setFormData({...formData, categoryId: ''});
+                          setShowCategoryDropdown(false);
+                        }}
+                      >
+                        Select a category
+                      </div>
+                      {categories.map(category => (
+                        <div 
+                          key={category.id}
+                          className={`custom-option ${formData.categoryId === category.id.toString() ? 'selected' : ''}`}
+                          onClick={() => {
+                            setFormData({...formData, categoryId: category.id.toString()});
+                            setShowCategoryDropdown(false);
+                          }}
+                        >
+                          {category.name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="form-group">
@@ -373,16 +414,18 @@ const BudgetModal = ({ isOpen, onClose, initialTab = 'add' }) => {
                             {new Date(2023, budget.month - 1).toLocaleString('default', { month: 'long' })}
                           </div>
                         </div>
-                        <button className="edit-budget-btn" title="Edit Budget" onClick={() => handleEditBudget(budget)}>
-                          Edit
-                        </button>
-                        <button 
-                          className="delete-budget-btn" 
-                          title="Delete Budget" 
-                          onClick={() => handleDeleteBudget(budget)}
-                        >
-                          Delete
-                        </button>
+                        <div className="budget-buttons">
+                          <button className="edit-budget-btn" title="Edit Budget" onClick={() => handleEditBudget(budget)}>
+                            <span className="edit-icon">✏️</span>
+                          </button>
+                          <button 
+                            className="delete-budget-btn" 
+                            title="Delete Budget" 
+                            onClick={() => handleDeleteBudget(budget)}
+                          >
+                            <span className="delete-icon">🗑️</span>
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>
