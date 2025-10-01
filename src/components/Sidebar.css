@@ -714,6 +714,26 @@ input:checked + .slider:before {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .settings-dropdown {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    border-radius: 20px 20px 0 0;
+    animation: slideUp 0.3s ease forwards;
+  }
+  
+ @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
   .sidebar {
     width: 250px;
   }
@@ -737,8 +757,18 @@ input:checked + .slider:before {
   .sidebar-header .logo h1 {
     font-size: 1.2rem;
   }
-
-  .settings-dropdown,
+  .settings-dropdown::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    z-index: -1;
+  }
+ 
   .budget-dropdown {
     position: fixed;
     left: 50%;

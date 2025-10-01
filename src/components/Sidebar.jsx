@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from './auth/AuthContext';
 import BudgetModal from './BudgetModal';
+import ContactModal from './ContactModal';
 import './Sidebar.css';
 
 const Sidebar = ({ isCollapsed, toggleSidebar, isMobile = false }) => {
@@ -11,6 +12,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar, isMobile = false }) => {
   const [isBudgetMenuOpen, setIsBudgetMenuOpen] = useState(false);
   const [isBudgetModalOpen, setIsBudgetModalOpen] = useState(false);
   const [budgetModalInitialTab, setBudgetModalInitialTab] = useState('add');
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const location = useLocation();
   const budgetDropdownRef = useRef(null);
   const settingsDropdownRef = useRef(null);
@@ -273,6 +275,14 @@ const Sidebar = ({ isCollapsed, toggleSidebar, isMobile = false }) => {
               <span className="item-icon">🔧</span>
               <span className="item-text">Account Settings</span>
             </div>
+             <div className="dropdown-item" onClick={() => {
+            setIsContactModalOpen(true);
+            setIsSettingsMenuOpen(false);
+            isMobile && toggleSidebar(); // Close sidebar on mobile after click
+          }}>
+            <span className="item-icon">✉️</span>
+            <span className="item-text">Contact Us</span>
+          </div>
           </div>
 
           <div className="dropdown-section">
@@ -315,6 +325,12 @@ const Sidebar = ({ isCollapsed, toggleSidebar, isMobile = false }) => {
         isOpen={isBudgetModalOpen} 
         onClose={() => setIsBudgetModalOpen(false)} 
         initialTab={budgetModalInitialTab}
+      />
+      
+      {/* Contact Modal */}
+      <ContactModal 
+        isOpen={isContactModalOpen} 
+        onClose={() => setIsContactModalOpen(false)} 
       />
     </>
   );
