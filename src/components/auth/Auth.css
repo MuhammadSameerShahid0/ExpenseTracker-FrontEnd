@@ -59,16 +59,52 @@ body {
   background-color: var(--bg-color);
 }
 
-.auth-container > header {
-  position: sticky;
-  top: 0;
+/* Glassmorphism Navbar */
+.header {
+  background: rgba(255, 255, 255, 0.15); /* Transparent glass effect */
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+
+  min-height: 45px;       /* 🔹 Smaller compact height */
+  width: 70%;             /* 🔹 Adjust width */
+  max-width: 900px;
+  margin: 0.5rem auto;     /* 🔹 Less margin */
+
+  position: fixed;
+  top: 2%;                /* 🔹 Closer to top */
+  left: 50%;
+  transform: translateX(-50%); /* only horizontal centering */
   z-index: 100;
-  width: 100%;
 }
 
+/* Center the container inside the glass nav */
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 1rem;   /* 🔹 Less padding = smaller nav */
+  max-width: 1000px;
+  margin: auto;
+}
+
+/* Mobile Fix */
+@media (max-width: 768px) {
+  .header {
+    position: fixed;
+    top: 0.5rem;           /* 🔹 Stick closer to very top */
+    width: 95%;            /* 🔹 Wider for mobile */
+    border-radius: 12px;   /* 🔹 Less rounded */
+  }
+
+  .header .container {
+    padding: 0.5rem 0.8rem;
+  }
+}
 .auth-card {
   flex: 0 0 50%;
-  background: var(--card-bg);
   padding: 3rem;
   display: flex;
   flex-direction: column;
@@ -115,8 +151,6 @@ body {
 
 .auth-card {
   flex: 0 0 50%;
-  background: var(--card-bg);
-  padding: 3rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -129,14 +163,14 @@ body {
 .auth-progress {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 2.5rem;
   position: relative;
+  padding: 4rem 0 0;
 }
 
 .auth-progress::before {
   content: '';
   position: absolute;
-  top: 20px;
+  top: 85px;
   left: 0;
   right: 0;
   height: 2px;
@@ -184,9 +218,16 @@ body {
   font-weight: 600;
 }
 
+.register-auth-header{
+ text-align: center;
+  margin-bottom: 3rem;
+  padding: 1rem 0 0rem;
+}
+
 .auth-header {
   text-align: center;
   margin-bottom: 2rem;
+  padding: 4rem 0 0rem;
 }
 
 .auth-header h2 {

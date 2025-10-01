@@ -78,22 +78,11 @@ const Navbar = () => {
   return (
     <header className="header">
       <div className="container">
-        {/* Left Section - Logo + Hamburger */}
+        {/* Left Section - Logo */}
         <div className="nav-left">
           <div className="logo" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
             <h1>ExpenseTracker</h1>
           </div>
-
-          {/* Hamburger menu for mobile */}
-          <button 
-            className="mobile-menu-button" 
-            onClick={toggleMobileMenu}
-            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-          >
-            <span className={`hamburger-icon ${isMobileMenuOpen ? 'open' : ''}`}></span>
-            <span className={`hamburger-icon ${isMobileMenuOpen ? 'open' : ''}`}></span>
-            <span className={`hamburger-icon ${isMobileMenuOpen ? 'open' : ''}`}></span>
-          </button>
 
           {user && (
             <nav className="nav-links">
@@ -108,6 +97,17 @@ const Navbar = () => {
 
         {/* Right Section - User Info + Theme + Logout */}
         <div className="nav-right">
+          {/* Hamburger menu for mobile */}
+          <button 
+            className="mobile-menu-button" 
+            onClick={toggleMobileMenu}
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+          >
+            <span className={`hamburger-icon ${isMobileMenuOpen ? 'open' : ''}`}></span>
+            <span className={`hamburger-icon ${isMobileMenuOpen ? 'open' : ''}`}></span>
+            <span className={`hamburger-icon ${isMobileMenuOpen ? 'open' : ''}`}></span>
+          </button>
+          
           {user ? (
             <div className="user-menu-container">
               <span className="welcome-msg">Welcome, {user.username}</span>

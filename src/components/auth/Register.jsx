@@ -398,7 +398,7 @@ const Register = () => {
           </div>
         </div>
 
-        <div className="auth-header">
+        <div className="register-auth-header">
           <h2>
             {step === 1
               ? "Create Your Account"
