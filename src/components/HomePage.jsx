@@ -1,8 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import Navbar from './Navbar'
+import PrivacyModal from './PrivacyModal'
+import TermsModal from './TermsModal'
+import ContactModal from './ContactModal'
 import './HomePage.css'
 
 const HomePage = () => {
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
 
   const features = [
     {
@@ -68,22 +75,30 @@ const HomePage = () => {
     {
       name: "Food & Dining",
       icon: "🍽️",
-      avg: "25%"
+      Payment: "Credit Card",
+      Amount: "$150",
+      Date: "2024-06-15"
     },
     {
       name: "Transportation",
       icon: "🚗",
-      avg: "15%"
+      Payment: "Debit Card",
+      Amount: "$75",
+      Date: "2024-06-14"
     },
     {
       name: "Housing",
       icon: "🏠",
-      avg: "35%"
+      Payment: "Bank Transfer",
+      Amount: "$1200",
+      Date: "2024-06-01"
     },
     {
       name: "Entertainment",
       icon: "🎬",
-      avg: "10%"
+      Payment: "Credit Card",
+      Amount: "$60",
+      Date: "2024-06-10"
     }
   ]
 
@@ -219,8 +234,16 @@ const HomePage = () => {
                 <h3 className="category-name">{category.name}</h3>
                 <div className="category-details">
                   <div className="avg-spending">
-                    <span className="label">Avg:</span>
-                    <span className="value">{category.avg}</span>
+                    <span className="label">Payment:&nbsp;</span>
+                    <span className="value">{category.Payment}</span>
+                  </div>
+                   <div className="avg-spending">
+                    <span className="label">Amount:</span>
+                    <span className="value">{category.Amount}</span>
+                  </div>
+                   <div className="avg-spending">
+                    <span className="label">Date:</span>
+                    <span className="value">{category.Date}</span>
                   </div>
                 </div>
                 <button className="btn-track">Track Expense</button>
@@ -367,14 +390,6 @@ const HomePage = () => {
                     ))}
                   </ul>
                 </div>
-                 <div className="footer-column">
-                  <h4>Company</h4>
-                  <ul>
-                    {footerLinks.company.map((link, index) => (
-                      <li key={index}><a href="#">{link}</a></li>
-                    ))}
-                  </ul>
-                </div>
                 <div className="footer-column">
                   <h4>Download App</h4>
                   <div className="app-download-buttons">
@@ -401,14 +416,27 @@ const HomePage = () => {
             <div className="footer-bottom">
               <p>&copy; {new Date().getFullYear()} ExpenseTracker. All rights reserved.</p>
               <div className="footer-legal">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Cookie Policy</a>
+                <a href="#" onClick={(e) => { e.preventDefault(); setShowPrivacyModal(true); }}>Privacy Policy</a>
+                <a href="#" onClick={(e) => { e.preventDefault(); setShowTermsModal(true); }}>Terms of Service</a>
+                <a href="#" onClick={(e) => { e.preventDefault(); setShowContactModal(true); }}>Contact</a>
               </div>
             </div>
           </div>
         </div>
       </footer>
+
+      <PrivacyModal 
+        isOpen={showPrivacyModal} 
+        onClose={() => setShowPrivacyModal(false)} 
+      />
+      <TermsModal 
+        isOpen={showTermsModal} 
+        onClose={() => setShowTermsModal(false)} 
+      />
+      <ContactModal 
+        isOpen={showContactModal} 
+        onClose={() => setShowContactModal(false)} 
+      />
     </div>
   )
 }
