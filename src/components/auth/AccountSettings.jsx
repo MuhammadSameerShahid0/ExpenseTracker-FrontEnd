@@ -230,7 +230,7 @@ const AccountSettings = () => {
       const token = localStorage.getItem('token');
       
       const response = await makeApiRequest(`/api/verify_2fa?code=${verificationCode}`, {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
         },

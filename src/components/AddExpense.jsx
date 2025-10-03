@@ -85,7 +85,14 @@ const AddExpense = () => {
         setTimeout(() => navigate('/dashboard'), 1500);
       } else {
         const data = await res.json();
-        setError(data.detail || 'Failed to add expense');
+
+        // data.detail is like "400: You can't add a future expense, correct the date"
+        const errorMessage = data.detail.includes(':')
+          ? data.detail.split(':').slice(1).join(':').trim() // removes "400:"
+          : data.detail;
+              
+        setError(errorMessage || 'Failed to add expense');
+
       }
     } catch (err) {
       setError('An error occurred. Please try again.');
