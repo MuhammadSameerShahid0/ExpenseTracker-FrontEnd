@@ -13,6 +13,9 @@ import AccountSettings from './components/auth/AccountSettings';
 import AccountReactivation from './components/auth/AccountReactivation';
 import Sidebar from './components/Sidebar';
 import { AuthProvider, useAuth } from './components/auth/AuthContext';
+import {GoogleOAuthProvider} from '@react-oauth/google';
+
+const GOOGLE_CLIENT_ID = `499651001685-vak0lv481tf3r80odvm3cs8s9iuoodfo.apps.googleusercontent.com`;
 
 // Layout component for protected routes that includes sidebar and mobile header
 function ProtectedLayout({ children, isSidebarCollapsed, isMobile, isMobileSidebarOpen, toggleSidebar, pageTitle }) {
@@ -218,9 +221,11 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <AppContent />
-      </Router>
+     <Router>
+        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+            <AppContent />
+        </GoogleOAuthProvider>
+      </Router>    
     </AuthProvider>
   );
 }

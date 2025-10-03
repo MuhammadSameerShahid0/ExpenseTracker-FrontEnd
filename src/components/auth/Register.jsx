@@ -5,6 +5,7 @@ import { handleGoogleCallback } from '../utils/GoogleAuth';
 import Navbar from "../Navbar";
 import { makeApiRequest } from '../../utils/api';
 import "./Auth.css";
+import { GoogleLogin } from '@react-oauth/google';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -28,6 +29,7 @@ const Register = () => {
   const [showSecretKey, setShowSecretKey] = useState(false);
   const [showSecurityInfo, setShowSecurityInfo] = useState(false); // For security info modal
   const [reactivationCode, setReactivationCode] = useState(""); // For account reactivation
+  const [reactivationEmail, setReactivationEmail] = useState("");
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -188,13 +190,64 @@ const Register = () => {
 
   const handleFinish = () => navigate("/dashboard");
 
+  // Handle Google Login for Registration
+  const handleGoogleLogin = async (credentialResponse) => {
+    if (credentialResponse.credential) {
+      try {
+        setIsLoading(true);
+        setError('');
+        
+        // Send the Google credential to your backend for registration
+        const response = await makeApiRequest(`/api/google_oauth_cred?code=${credentialResponse.credential}`, {
+          method: 'POST'
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Check if we received a token directly (2FA disabled) or a message (2FA enabled)
+          if (data.access_token) {
+            // 2FA is disabled, we received a token directly
+            login({ email: data.email, username: data.username }, data.access_token);
+            navigate('/dashboard'); // Redirect to dashboard
+          } else {
+            // 2FA is enabled, move to verification step
+            if (data.qr_code_2fa) {
+              setQrCode(data.qr_code_2fa);
+              setSecretKey(data.secret_key_2fa);
+            }
+            setStep(2); // Move to verification step
+          }
+        } else {
+          // Check if the error is related to an inactive account
+          if (data.detail && data.detail.message.includes('Account not active')) {
+            // Set the email for reactivation and move to reactivation step
+            setError(`This email belongs to a deactivated account. Would you like to reactivate it?`);
+            setReactivationEmail(data.detail.email);
+            setStep(4); // New step for reactivation
+          } else {
+            setError(data.detail || 'Registration failed');
+          }
+        }
+      } catch (err) {
+        setError('An error occurred during Google registration. Please try again.');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  const handleGoogleLoginError = async () => {
+    setError('Google registration was unsuccessful. Please try again.');
+  }
+
   // Handle reactivation request
   const handleReactivationRequest = async () => {
     setIsLoading(true);
     setError("");
 
     try {
-      const response = await makeApiRequest(`/api/re-active-account?email=${encodeURIComponent(formData.email)}`, {
+      const response = await makeApiRequest(`/api/re-active-account?email=${encodeURIComponent(reactivationEmail)}`, {
         method: "POST"
       });
 
@@ -522,42 +575,14 @@ const Register = () => {
             <div className="divider-or">
               <span>or</span>
             </div>
-
-            {/* Google Registration Button */}
-            <button 
-              type="button" 
-              className="btn btn-google btn-block"
-              onClick={async () => {
-                try {
-                  setIsLoading(true);
-                  setError('');
-                  const frontendRedirectUri = window.location.origin;
-                  const googleRegisterUrl = `/api/register_via_google?frontend_redirect_uri=${encodeURIComponent(frontendRedirectUri)}`;
-                  window.location.href = googleRegisterUrl;
-                } catch (err) {
-                  setError('An error occurred during Google registration. Please try again.');
-                  setIsLoading(false);
-                }
-              }}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <div className="spinner"></div>
-                  <span>Redirecting...</span>
-                </>
-              ) : (
-                <>
-                  <svg className="google-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M22.56 12.25C22.56 11.47 22.49 10.72 22.36 10H12V14.26H17.92C17.66 15.63 16.88 16.79 15.71 17.57V20.34H19.28C21.36 18.42 22.56 15.6 22.56 12.25Z" fill="#4285F4"/>
-                    <path d="M12 23C14.97 23 17.46 22.02 19.28 20.34L15.71 17.57C14.73 18.23 13.48 18.64 12 18.64C9.14 18.64 6.71 16.69 5.84 14.09H2.18V16.91C3.99 20.5 7.7 23 12 23Z" fill="#34A853"/>
-                    <path d="M5.84 14.09C5.62 13.43 5.49 12.73 5.49 12C5.49 11.27 5.62 10.57 5.84 9.91V7.09H2.18C1.43 8.55 1 10.19 1 12C1 13.81 1.43 15.45 2.18 16.91L5.84 14.09Z" fill="#FBBC05"/>
-                    <path d="M12 5.36C13.62 5.36 15.06 5.93 16.21 7.03L19.36 3.88C17.45 2.07 14.97 1 12 1C7.7 1 3.99 3.5 2.18 7.09L5.84 9.91C6.71 7.31 9.14 5.36 12 5.36Z" fill="#EA4335"/>
-                  </svg>
-                  <span>Continue with Google</span>
-                </>
-              )}
-            </button>
+            
+            {/* Google Login Button - Same as in Login component */}
+            <div className="google-login-wrapper">
+            <GoogleLogin
+              onSuccess={handleGoogleLogin}
+              onError={handleGoogleLoginError}
+            />
+            </div>
 
             <div className="auth-footer">
               <p>
@@ -657,7 +682,7 @@ const Register = () => {
                 <label>Email Address</label>
                 <input
                   type="email"
-                  value={formData.email}
+                  value={reactivationEmail}
                   readOnly
                   className="readonly-input"
                 />
