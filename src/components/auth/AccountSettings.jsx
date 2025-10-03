@@ -68,6 +68,7 @@ const AccountSettings = () => {
       }
     } catch (error) {
       setError('Failed to fetch user profile');
+      setTimeout(() => setError(''), 5000);
       localStorage.removeItem('token');
       navigate('/login');
     } finally {
@@ -90,6 +91,7 @@ const AccountSettings = () => {
     
     if (formData.newPassword && formData.newPassword !== formData.confirmNewPassword) {
       setError('New passwords do not match');
+      setTimeout(() => setError(''), 5000);
       return;
     }
     
@@ -116,11 +118,13 @@ const AccountSettings = () => {
         
         if (response.ok) {
           setSuccess('Profile and password updated successfully');
+          setTimeout(() => setSuccess(''), 5000);
           setIsEditing(false);
           fetchUserProfile(token);
         } else {
           const data = await response.json();
           setError(data.detail || 'Failed to update profile and password');
+          setTimeout(() => setError(''), 5000);
         }
       } else {
         // For profile-only updates (no password change), we need to call a different endpoint
@@ -143,15 +147,18 @@ const AccountSettings = () => {
         
         if (response.ok) {
           setSuccess('Profile updated successfully');
+          setTimeout(() => setSuccess(''), 5000);
           setIsEditing(false);
           fetchUserProfile(token);
         } else {
           const data = await response.json();
           setError(data.detail || 'Failed to update profile');
+          setTimeout(() => setError(''), 5000);
         }
       }
     } catch (error) {
       setError('An error occurred while updating profile');
+      setTimeout(() => setError(''), 5000);
     }
   };
 
@@ -175,9 +182,11 @@ const AccountSettings = () => {
         setError('');
       } else {
         setError(data.detail || 'Failed to enable 2FA');
+        setTimeout(() => setError(''), 5000);
       }
     } catch (err) {
       setError('An error occurred while enabling 2FA');
+      setTimeout(() => setError(''), 5000);
     }
   };
 
@@ -198,12 +207,14 @@ const AccountSettings = () => {
         fetchUserProfile(token);
         setShowDisable2FAModal(false);
         setSuccess('2FA has been disabled successfully');
-        setTimeout(() => setSuccess(''), 3000);
+        setTimeout(() => setSuccess(''), 5000);
       } else {
         setError(data.detail || 'Failed to disable 2FA');
+        setTimeout(() => setError(''), 5000);
       }
     } catch (err) {
       setError('An error occurred while disabling 2FA');
+      setTimeout(() => setError(''), 5000);
     }
   };
 
@@ -220,6 +231,7 @@ const AccountSettings = () => {
     
     if (!verificationCode || verificationCode.length !== 6) {
       setError('Please enter a valid 6-digit verification code');
+      setTimeout(() => setError(''), 5000);
       return;
     }
     
@@ -243,12 +255,14 @@ const AccountSettings = () => {
         setShow2FAModal(false);
         setVerificationCode('');
         setSuccess('2FA has been enabled successfully');
-        setTimeout(() => setSuccess(''), 3000);
+        setTimeout(() => setSuccess(''), 5000);
       } else {
         setError(data.detail || 'Failed to verify 2FA code');
+        setTimeout(() => setError(''), 5000);
       }
     } catch (err) {
       setError('An error occurred while verifying 2FA code');
+      setTimeout(() => setError(''), 5000);
     } finally {
       setIsVerifying(false);
     }
@@ -279,9 +293,11 @@ const AccountSettings = () => {
           window.location.reload(); // Reload to reset app state
         } else {
           setError(data.detail || 'Failed to delete account');
+          setTimeout(() => setError(''), 5000);
         }
       } catch (err) {
         setError('An error occurred while deleting your account');
+        setTimeout(() => setError(''), 5000);
       } finally {
         setLoading(false);
       }
@@ -312,9 +328,11 @@ const AccountSettings = () => {
         setShowLoginHistoryModal(true);
       } else {
         setError(data.detail || 'Failed to fetch login history');
+        setTimeout(() => setError(''), 5000);
       }
     } catch (err) {
       setError('An error occurred while fetching login history');
+      setTimeout(() => setError(''), 5000);
     } finally {
       setIsFetchingHistory(false);
     }
@@ -341,9 +359,11 @@ const AccountSettings = () => {
         setShowExportModal(true);
       } else {
         setError(data.detail || 'Failed to fetch logging data');
+        setTimeout(() => setError(''), 5000);
       }
     } catch (err) {
       setError('An error occurred while fetching logging data');
+      setTimeout(() => setError(''), 5000);
     } finally {
       setIsExporting(false);
     }
@@ -352,6 +372,7 @@ const AccountSettings = () => {
   const generatePDF = async () => {
     if (!exportData || exportData.length === 0) {
       setError('No data to export');
+      setTimeout(() => setError(''), 5000);
       return;
     }
 
@@ -424,16 +445,18 @@ const AccountSettings = () => {
       window.open(pdfUrl, '_blank');
       
       setSuccess('PDF preview opened in new tab!');
-      setTimeout(() => setSuccess(''), 3000);
+      setTimeout(() => setSuccess(''), 5000);
     } catch (err) {
       console.error('Error generating PDF:', err);
       setError('Failed to generate PDF. Please try again.');
+      setTimeout(() => setError(''), 5000);
     }
   };
 
   const downloadPDF = async () => {
     if (!exportData || exportData.length === 0) {
       setError('No data to export');
+      setTimeout(() => setError(''), 5000);
       return;
     }
 
@@ -503,10 +526,11 @@ const AccountSettings = () => {
       // Save the PDF
       doc.save('ExpenseTracker-history-data.pdf');
       setSuccess('PDF downloaded successfully!');
-      setTimeout(() => setSuccess(''), 3000);
+      setTimeout(() => setSuccess(''), 5000);
     } catch (err) {
       console.error('Error generating PDF:', err);
       setError('Failed to generate PDF. Please try again.');
+      setTimeout(() => setError(''), 5000);
     }
   };
 
@@ -595,6 +619,16 @@ const AccountSettings = () => {
                     &times;
                   </button>
                 </div>
+                {error && (
+                  <div className="alert error" style={{margin: '10px', borderRadius: '4px'}}>
+                    {error}
+                  </div>
+                )}
+                {success && (
+                  <div className="alert success" style={{margin: '10px', borderRadius: '4px'}}>
+                    {success}
+                  </div>
+                )}
                 <div className="modal-body">
                   <div className="qr-code-section">
                     <p>Scan this QR code with your authenticator app:</p>
@@ -620,7 +654,7 @@ const AccountSettings = () => {
                         onClick={() => {
                           navigator.clipboard.writeText(secretKey);
                           setSuccess('Secret key copied to clipboard');
-                          setTimeout(() => setSuccess(''), 2000);
+                          setTimeout(() => setSuccess(''), 5000);
                         }}
                       >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
