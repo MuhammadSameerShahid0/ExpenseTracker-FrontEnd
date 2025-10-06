@@ -1459,6 +1459,67 @@ body.modal-open > .dashboard-container {
   color: #818cf8;
 }
 
+/* Budget Context Info */
+.budget-context {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(226, 232, 240, 0.5);
+}
+
+.financial-context {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(226, 232, 240, 0.5);
+}
+
+.context-description {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary, #64748b);
+  line-height: 1.4;
+}
+
+.budget-tips,
+.health-tips {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  font-size: 0.8rem;
+  color: #4361ee;
+  background: rgba(67, 97, 238, 0.05);
+  padding: 0.75rem;
+  border-radius: 8px;
+}
+
+.tip-label {
+  font-weight: 600;
+  color: #4361ee;
+}
+
+.tip-text {
+  flex: 1;
+}
+
+/* Dark Mode for Budget Context */
+[data-theme='dark'] .budget-context,
+[data-theme='dark'] .financial-context {
+  border-top: 1px solid #475569;
+}
+
+[data-theme='dark'] .context-description {
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .budget-tips,
+[data-theme='dark'] .health-tips {
+  background: rgba(99, 102, 241, 0.1);
+  color: #818cf8;
+}
+
+[data-theme='dark'] .tip-label {
+  color: #818cf8;
+}
+
 [data-theme='dark'] .budget-progress {
   background: #4f46e5;
 }

@@ -602,6 +602,29 @@ const Dashboard = () => {
               ></div>
             </div>
             <p className="budget-percentage">{budgetUtilization.toFixed(1)}% of budget used</p>
+            <div className="budget-context">
+              <p className="context-description">
+                {budgetUtilization < 50 
+                  ? "Great job! You're well within your budget." 
+                  : budgetUtilization < 75 
+                  ? "Good spending control. Keep monitoring your expenses." 
+                  : budgetUtilization < 90 
+                  ? "Approaching budget limit. Consider reviewing expenses." 
+                  : "Over budget limit. Immediate action needed to adjust spending."}
+              </p>
+              <div className="budget-tips">
+                <span className="tip-label">💡 Tip:</span>
+                <span className="tip-text">
+                  {budgetUtilization < 50 
+                    ? "Consider allocating some funds to savings or investments." 
+                    : budgetUtilization < 75 
+                    ? "Track your spending categories to identify potential savings." 
+                    : budgetUtilization < 90 
+                    ? "Consider reviewing your spending patterns." 
+                    : "Review your budget categories and prioritize essential expenses."}
+                </span>
+              </div>
+            </div>
           </div>
           
           <div className="insight-card">
@@ -617,6 +640,29 @@ const Dashboard = () => {
                 )}
               </div>
               <p>Based on budget utilization</p>
+            </div>
+            <div className="financial-context">
+              <p className="context-description">
+                {monthlyExpenses < totalBudget * 0.5 
+                  ? "" 
+                  : monthlyExpenses < totalBudget * 0.75 
+                  ? "" 
+                  : monthlyExpenses < totalBudget 
+                  ? "" 
+                  : ""}
+              </p>
+              <div className="health-tips">
+                <span className="tip-label">💡 Tip:</span>
+                <span className="tip-text">
+                  {monthlyExpenses < totalBudget * 0.5 
+                    ? "Consider reallocating unused budget to savings or investments for future growth." 
+                    : monthlyExpenses < totalBudget * 0.75 
+                    ? "Continue monitoring your budget and look for small improvements in spending habits." 
+                    : monthlyExpenses < totalBudget 
+                    ? "Review your non-essential expenses and consider adjusting your budget categories." 
+                    : "Create an emergency plan to reduce expenses and avoid debt accumulation."}
+                </span>
+              </div>
             </div>
           </div>
           
