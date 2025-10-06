@@ -1030,17 +1030,50 @@
   color: #dc3545;
 }
 
+/* Insight Card Header */
+.insight-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.insight-card-header h3 {
+  margin: 0;
+}
+
+.view-all-btn {
+  background: rgba(67, 97, 238, 0.1);
+  color: #4361ee;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-all-btn:hover {
+  background: rgba(67, 97, 238, 0.2);
+  transform: translateY(-1px);
+}
+
 /* Top Category */
 .top-category {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-weight: 500;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
 }
 
 .category-name {
   color: var(--text-color, #1e293b);
   font-size: 1.1rem;
+  font-weight: 600;
 }
 
 .category-percentage {
@@ -1050,6 +1083,39 @@
   border-radius: 20px;
   font-size: 0.9rem;
   font-weight: 600;
+}
+
+.budget-expense-info {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+}
+
+.category-budget, .category-spent {
+  background: rgba(30, 136, 74, 0.1);
+  color: #1e8844;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.category-spent {
+  background: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+.budget-percentage-used {
+  width: 100%;
+}
+
+.percentage-value {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
 }
 
 .no-data {
@@ -1236,6 +1302,16 @@
   background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
   border: 1px solid #475569;
   color: #e2e8f0;
+}
+
+/* Background blur effect when modal is open */
+body.modal-open {
+  overflow: hidden; /* Prevents background scrolling when modal is open */
+}
+
+body.modal-open > .dashboard-container {
+  filter: blur(4px);
+  transition: filter 0.3s ease;
 }
 
 [data-theme='dark'] .stat-card h3 {

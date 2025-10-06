@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import BudgetModal from './BudgetModal';
+import BudgetVsTransactionsModal from './BudgetVsTransactionsModal';
 import { makeApiRequest } from '../utils/api';
+import { budgetService } from '../services/budgetService';
 import "./Dashboard.css";
 
 const Dashboard = () => {
@@ -27,8 +29,24 @@ const Dashboard = () => {
   const [monthlyIncome, setMonthlyIncome] = useState(0); // For financial dashboard
   const [savings, setSavings] = useState(0); // For financial dashboard
   const [expenseTrend, setExpenseTrend] = useState([]); // For trend analysis
+  const [budgetAgainstTransactions, setBudgetAgainstTransactions] = useState([]); // For budget vs transactions data
+  const [showBudgetVsTransactionsModal, setShowBudgetVsTransactionsModal] = useState(false); // For budget vs transactions modal
 
   const navigate = useNavigate();
+
+  // Handle background blur when modal is open
+  useEffect(() => {
+    if (showBudgetVsTransactionsModal) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.classList.remove('modal-open');
+    };
+  }, [showBudgetVsTransactionsModal]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -67,6 +85,11 @@ const Dashboard = () => {
 
   // Calculate budget utilization percentage
   const budgetUtilization = totalBudget > 0 ? (monthlyExpenses / totalBudget) * 100 : 0;
+
+  // Find the category with highest percentage of budget used
+  const highestBudgetUsedCategory = budgetAgainstTransactions.length > 0 
+    ? [...budgetAgainstTransactions].sort((a, b) => (b.spent_amount / b.budget_limit_amount) - (a.spent_amount / a.budget_limit_amount))[0]
+    : null;
 
   // ✅ Build pie chart data using categories + transaction totals
   const pieChartData = categories.map((cat, index) => {
@@ -134,7 +157,8 @@ const Dashboard = () => {
         selectedDate.getFullYear(),
         selectedDate.getMonth() + 1
       ),
-      fetchTotalBudgetForMonth(token, selectedBudgetMonth.getMonth() + 1)
+      fetchTotalBudgetForMonth(token, selectedBudgetMonth.getMonth() + 1),
+      fetchBudgetAgainstTransactions(token)
     ]);
   };
 
@@ -297,6 +321,17 @@ const Dashboard = () => {
     } catch (err) {
       console.error("Failed to fetch total budget for month:", err);
       setTotalBudget(0);
+    }
+  };
+
+  // ✅ Fetch budget against transactions data
+  const fetchBudgetAgainstTransactions = async (token) => {
+    try {
+      const data = await budgetService.getBudgetAgainstTransactions();
+      setBudgetAgainstTransactions(data);
+    } catch (err) {
+      console.error("Failed to fetch budget against transactions data:", err);
+      setBudgetAgainstTransactions([]);
     }
   };
 
@@ -586,12 +621,30 @@ const Dashboard = () => {
           </div>
           
           <div className="insight-card">
-            <h3>Top Expense Category</h3>
+            <div className="insight-card-header">
+              <h3>Budget vs Transaction</h3>
+              {budgetAgainstTransactions.length > 1 && (
+                <button 
+                  className="view-all-btn"
+                  onClick={() => setShowBudgetVsTransactionsModal(true)}
+                >
+                  View All
+                </button>
+              )}
+            </div>
             <div className="top-category">
-              {pieChartData.length > 0 ? (
+              {highestBudgetUsedCategory ? (
                 <>
-                  <span className="category-name">{pieChartData[0].name}</span>
-                  <span className="category-percentage">{pieChartData[0].percentage.toFixed(1)}%</span>
+                  <span className="category-name">{highestBudgetUsedCategory.category_name}</span>
+                  <div className="budget-expense-info">
+                    <span className="category-budget">Budget: PKR {highestBudgetUsedCategory.budget_limit_amount.toFixed(2)}</span>
+                    <span className="category-spent">Spent: PKR {highestBudgetUsedCategory.spent_amount.toFixed(2)}</span>
+                  </div>
+                  <div className="budget-percentage-used">
+                    <span className="percentage-value">
+                      {((highestBudgetUsedCategory.spent_amount / highestBudgetUsedCategory.budget_limit_amount) * 100).toFixed(1)}% of budget
+                    </span>
+                  </div>
                 </>
               ) : (
                 <span className="no-data">No data available</span>
@@ -794,6 +847,11 @@ const Dashboard = () => {
         isOpen={showBudgetModal} 
         onClose={() => setShowBudgetModal(false)} 
         initialTab={budgetModalTab} 
+      />
+      <BudgetVsTransactionsModal 
+        isOpen={showBudgetVsTransactionsModal} 
+        onClose={() => setShowBudgetVsTransactionsModal(false)} 
+        budgetData={budgetAgainstTransactions} 
       />
     </div>
   );

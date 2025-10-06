@@ -121,5 +121,24 @@ export const budgetService = {
     }
 
     return await response.json();
+  },
+
+  // Get budget against transactions data
+  async getBudgetAgainstTransactions() {
+    const token = localStorage.getItem('token');
+    
+    const response = await makeApiRequest('/api/budget-against-transactions', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || 'Failed to fetch budget against transactions data');
+    }
+
+    return await response.json();
   }
 };
