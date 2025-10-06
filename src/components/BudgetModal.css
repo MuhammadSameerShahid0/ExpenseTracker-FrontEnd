@@ -846,7 +846,7 @@
   left: 0;
   right: 0;
   z-index: 10;
-  max-height: 150px;
+  max-height: 12rem; /* Higher height to ensure at least 3 options are visible */
   overflow-y: auto;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -854,7 +854,6 @@
   background: linear-gradient(135deg, var(--card-bg, #ffffff) 0%, #f8fafc 100%);
   border: 1px solid rgba(226, 232, 240, 0.5);
   border-radius: 8px;
-  overflow: hidden;
 }
 
 [data-theme='dark'] .custom-options {
