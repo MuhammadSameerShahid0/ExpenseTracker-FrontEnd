@@ -244,38 +244,51 @@ const Login = () => {
   const handleGoogleLogin = async (credentialResponse) => {
     if (credentialResponse.credential) {
       // The credential is a JWT token, we can send it to our backend for verification
-       try {
+      setIsLoading(true);
+      setError('');
+      
+      try {
         const response = await makeApiRequest(`/api/google_oauth_cred?code=${credentialResponse.credential}`, {
-        method: 'POST'
-      });
+          method: 'POST'
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (response.ok) {
-        // Check if we received a token directly (2FA disabled) or a message (2FA enabled)
-        if (data.access_token) {
-          // 2FA is disabled, we received a token directly
-          login({ email: formData.email, username: data.username }, data.access_token);
-          navigate('/dashboard'); // Redirect to dashboard
+        if (response.ok) {
+          // Check if we received a token directly (2FA disabled) or a message (2FA enabled)
+          if (data.access_token) {
+            // 2FA is disabled, we received a token directly
+            login({ email: data.email, username: data.username }, data.access_token);
+            navigate('/dashboard'); // Redirect to dashboard
+          } else {
+            // 2FA is enabled, move to verification step
+            setStep(2); // Move to verification step
+          }
         } else {
-          // 2FA is enabled, move to verification step
-          setStep(2); // Move to verification step
+          // Show the original error from the API
+          if (data.detail && typeof data.detail === 'object' && data.detail.message) {
+            // Handle case where detail contains a message property
+            if (data.detail.message.includes('Account not active')) {
+              // Set the email for reactivation and move to reactivation step
+              setReactivationData(prev => ({ ...prev, email: data.detail.email || formData.email }));
+              setStep(3);
+            } else {
+              setError(data.detail.message || 'Login failed');
+            }
+          } else if (data.detail) {
+            // Handle case where detail is a string or other direct error message
+            setError(data.detail);
+          } else {
+            // Fallback for other error formats
+            setError(data.message || data.error || 'Login failed');
+          }
         }
-      } else {
-        // Check if the error is related to an inactive account
-        if (data.detail && data.detail.message.includes('Account not active')) {
-          // Set the email for reactivation and move to reactivation step
-          setReactivationData(prev => ({ ...prev, email: data.detail.email }));
-          setStep(3);
-        } else {
-          setError(data.detail || 'Login failed');
-        }
+      } catch (err) {
+        // Show the actual error that occurred during the API call
+        setError(err.message || 'An error occurred during Google login. Please try again.');
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      setError('An error occurred. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
     }
   };
 
