@@ -27,7 +27,7 @@
   --gray-900: #0f172a;
   
   /* Theme Variables */
-  --bg-color: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Glass liquid gradient */
+  --bg-color: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); /* Glass liquid gradient */
   --text-color: #f8fafc;
   --header-bg: rgba(255, 255, 255, 0.1);
   --card-bg: rgba(255, 255, 255, 0.05); /* More translucent for frosted effect */
@@ -1392,11 +1392,11 @@ body::after {
   font-size: 1.75rem;
   font-weight: 800;
   margin-bottom: 1rem;
-  color: white;
+   color: var(--accent-color);
 }
 
 .footer-brand p {
-  color: var(--gray-400);
+  color: var(--gray-600);
   margin-bottom: 2rem;
   line-height: 1.6;
 }
@@ -1431,10 +1431,10 @@ body::after {
 }
 
 .footer-column h4 {
-  color: white;
   margin-bottom: 1.5rem;
   font-size: 1.125rem;
   font-weight: 700;
+  color: var(--gray-700);
 }
 
 .footer-column ul {
@@ -1450,10 +1450,11 @@ body::after {
   text-decoration: none;
   transition: var(--transition);
   font-size: 0.95rem;
+   color: var(--text-color);
 }
 
 .footer-column a:hover {
-  color: white;
+  color: var(--primary-color);
 }
 
 .footer-bottom {
@@ -1462,7 +1463,7 @@ body::after {
   align-items: center;
   padding-top: 2rem;
   border-top: 1px solid var(--gray-800);
-  color: var(--gray-500);
+  color: var(--text-color);
   flex-wrap: wrap;
   gap: 1rem;
 }
@@ -1473,14 +1474,14 @@ body::after {
 }
 
 .footer-legal a {
-  color: var(--gray-500);
+   color: var(--text-color);
   text-decoration: none;
   transition: var(--transition);
   font-size: 0.9rem;
 }
 
 .footer-legal a:hover {
-  color: white;
+   color: var(--primary-color);
 }
 
 /* Responsive Design */
