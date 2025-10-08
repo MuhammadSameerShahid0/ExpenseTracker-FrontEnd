@@ -154,9 +154,11 @@ const BudgetModal = ({ isOpen, onClose, initialTab = 'add' }) => {
   };
 
   // Filter budgets based on search term
-  const filteredBudgets = budgets.filter(budget => 
-    budget.category_name.toLowerCase().includes(filterTerm.toLowerCase())
-  );
+  const filteredBudgets = Array.isArray(budgets)
+  ? budgets.filter(budget =>
+      budget.category_name.toLowerCase().includes(filterTerm.toLowerCase())
+    )
+  : [];
   
   // Get current filtered budgets for pagination
   const indexOfLastBudget = currentPage * budgetsPerPage;

@@ -212,7 +212,7 @@ const Dashboard = () => {
 
       if (res.ok) {
         const data = await res.json();
-        setTotalTransactions(data.total_transactions);
+        setTotalTransactions(data);
       }
     } catch (err) {
       console.error("Failed to fetch total transactions:", err);
