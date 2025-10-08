@@ -9,6 +9,10 @@ const BudgetModal = ({ isOpen, onClose, initialTab = 'add' }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  // State for month selection
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // Default to current month (1-12)
+  // State for month calendar modal
+  const [showMonthModal, setShowMonthModal] = useState(false);
 
   // Update activeTab when the modal opens with a new initialTab
   useEffect(() => {
@@ -82,9 +86,9 @@ const BudgetModal = ({ isOpen, onClose, initialTab = 'add' }) => {
   useEffect(() => {
     if (isOpen) {
       loadCategories();
-      loadBudgets();
+      loadBudgets(selectedMonth);
     }
-  }, [isOpen]);
+  }, [isOpen, selectedMonth]);
 
   const loadCategories = async () => {
     try {
@@ -100,10 +104,10 @@ const BudgetModal = ({ isOpen, onClose, initialTab = 'add' }) => {
     }
   };
 
-  const loadBudgets = async () => {
+  const loadBudgets = async (month = null) => {
     try {
       setLoading(true);
-      const data = await budgetService.getBudgets();
+      const data = await budgetService.getBudgets(month);
       setBudgets(data);
       // Reset to first page when loading new budgets
       setCurrentPage(1);
@@ -140,8 +144,8 @@ const BudgetModal = ({ isOpen, onClose, initialTab = 'add' }) => {
       );
       setSuccess(response);
       setFormData({ categoryId: '', limit: '' });
-      // Refresh budgets list
-      loadBudgets();
+      // Refresh budgets list with current selected month
+      loadBudgets(selectedMonth);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -203,8 +207,8 @@ const BudgetModal = ({ isOpen, onClose, initialTab = 'add' }) => {
       setEditAmount('');
       setShowEditModal(false);
       
-      // Refresh budgets list
-      loadBudgets();
+      // Refresh budgets list with current selected month
+      loadBudgets(selectedMonth);
       
       // Auto-clear success message after 3 seconds
       setTimeout(() => setEditSuccess(''), 3000);
@@ -243,8 +247,8 @@ const BudgetModal = ({ isOpen, onClose, initialTab = 'add' }) => {
       setBudgetToDelete(null);
       setShowDeleteModal(false);
       
-      // Refresh budgets list
-      loadBudgets();
+      // Refresh budgets list with current selected month
+      loadBudgets(selectedMonth);
       
       // Auto-clear success message after 3 seconds
       setTimeout(() => setDeleteSuccess(''), 3000);
@@ -261,6 +265,19 @@ const BudgetModal = ({ isOpen, onClose, initialTab = 'add' }) => {
     setDeleteError('');
     setDeleteSuccess('');
     setShowDeleteModal(false);
+  };
+
+  // Function to handle month selection
+  const handleMonthSelect = (month) => {
+    setSelectedMonth(month);
+    // Load budgets for the selected month
+    loadBudgets(month);
+    setShowMonthModal(false);
+  };
+
+  // Function to close month modal
+  const closeMonthModal = () => {
+    setShowMonthModal(false);
   };
 
   // Function to paginate with filtered budgets
@@ -386,6 +403,17 @@ const BudgetModal = ({ isOpen, onClose, initialTab = 'add' }) => {
             </form>
           ) : (
             <div className="budgets-list">
+              {/* Month selector button */}
+              <div className="month-selector">
+                <label>Selected Month:</label>
+                <button 
+                  className="month-select-btn"
+                  onClick={() => setShowMonthModal(true)}
+                >
+                  {new Date(2023, selectedMonth - 1).toLocaleString('default', { month: 'long' })} ▼
+                </button>
+              </div>
+              
               {/* Filter input */}
               <div className="filter-section">
                 <span className="filter-icon">🔍</span>
@@ -477,6 +505,43 @@ const BudgetModal = ({ isOpen, onClose, initialTab = 'add' }) => {
           )}
         </div>
       </div>
+      
+      {/* Month Selection Modal */}
+      {showMonthModal && (
+        <div className="month-modal-overlay blurred" onClick={closeMonthModal}>
+          <div className="month-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="month-modal-header">
+              <h3>Select Month</h3>
+              <button className="modal-close" onClick={closeMonthModal}>&times;</button>
+            </div>
+            
+            <div className="months-grid">
+              {[
+                { value: 1, name: 'Jan' },
+                { value: 2, name: 'Feb' },
+                { value: 3, name: 'Mar' },
+                { value: 4, name: 'Apr' },
+                { value: 5, name: 'May' },
+                { value: 6, name: 'Jun' },
+                { value: 7, name: 'Jul' },
+                { value: 8, name: 'Aug' },
+                { value: 9, name: 'Sep' },
+                { value: 10, name: 'Oct' },
+                { value: 11, name: 'Nov' },
+                { value: 12, name: 'Dec' }
+              ].map((month) => (
+                <button
+                  key={month.value}
+                  className={`month-btn ${selectedMonth === month.value ? 'selected' : ''}`}
+                  onClick={() => handleMonthSelect(month.value)}
+                >
+                  {month.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Edit Budget Modal */}
       {showEditModal && editingBudget && (

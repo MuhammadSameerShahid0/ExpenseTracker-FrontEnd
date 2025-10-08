@@ -25,10 +25,15 @@ export const budgetService = {
   },
 
   // Get all budgets for the user
-  async getBudgets() {
+  async getBudgets(month = null) {
     const token = localStorage.getItem('token');
+    let url = '/api/budgets';
     
-    const response = await makeApiRequest('/api/budgets', {
+    if (month !== null) {
+      url += `?month=${month}`;
+    }
+    
+    const response = await makeApiRequest(url, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
