@@ -153,7 +153,7 @@ const BudgetModal = ({ isOpen, onClose, initialTab = 'add' }) => {
     }
   };
 
-  // Filter budgets based on search term
+  // Filter budgets based on search term ..
   const filteredBudgets = Array.isArray(budgets)
   ? budgets.filter(budget =>
       budget.category_name.toLowerCase().includes(filterTerm.toLowerCase())
