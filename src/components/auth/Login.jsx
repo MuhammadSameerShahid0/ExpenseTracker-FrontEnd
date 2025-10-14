@@ -55,6 +55,7 @@ const Login = () => {
             const data = await response.json();
             // Use the auth context to set the user and token
             login(data.user, token);
+            sessionStorage.setItem('justLoggedIn', 'true'); // Set flag for modal
             // Navigate to dashboard after successful Google login
             navigate('/dashboard');
           } else {
@@ -119,6 +120,7 @@ const Login = () => {
         if (data.access_token) {
           // 2FA is disabled, we received a token directly
           login({ email: formData.email, username: data.username }, data.access_token);
+          sessionStorage.setItem('justLoggedIn', 'true'); // Set flag for modal
           navigate('/dashboard'); // Redirect to dashboard
         } else {
           // 2FA is enabled, move to verification step
@@ -163,6 +165,7 @@ const Login = () => {
         
         // Use the auth context to set the user and token
         login(user, data.access_token);
+        sessionStorage.setItem('justLoggedIn', 'true'); // Set flag for modal
         navigate('/dashboard'); // Redirect to dashboard
       } else {
         setError(data.detail || 'Verification failed');
@@ -259,6 +262,7 @@ const Login = () => {
           if (data.access_token) {
             // 2FA is disabled, we received a token directly
             login({ email: data.email, username: data.username }, data.access_token);
+            sessionStorage.setItem('justLoggedIn', 'true'); // Set flag for modal
             navigate('/dashboard'); // Redirect to dashboard
           } else {
             // 2FA is enabled, move to verification step

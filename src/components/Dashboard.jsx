@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import BudgetModal from './BudgetModal';
 import BudgetVsTransactionsModal from './BudgetVsTransactionsModal';
+import SubscribeMonthlyModal from './SubscribeMonthlyModal';
 import { makeApiRequest } from '../utils/api';
 import { budgetService } from '../services/budgetService';
 import "./Dashboard.css";
@@ -31,6 +32,15 @@ const Dashboard = () => {
   const [expenseTrend, setExpenseTrend] = useState([]); // For trend analysis
   const [budgetAgainstTransactions, setBudgetAgainstTransactions] = useState([]); // For budget vs transactions data
   const [showBudgetVsTransactionsModal, setShowBudgetVsTransactionsModal] = useState(false); // For budget vs transactions modal
+  const [showSubscribeModal, setShowSubscribeModal] = useState(() => {
+    // Check if user just logged in when component initializes
+    const justLoggedIn = sessionStorage.getItem('justLoggedIn');
+    if (justLoggedIn === 'true') {
+      sessionStorage.removeItem('justLoggedIn'); // Clear the flag immediately
+      return true; // Show modal on initial load after login
+    }
+    return false; // Otherwise don't show modal
+  });
 
   const navigate = useNavigate();
 
@@ -898,6 +908,13 @@ const Dashboard = () => {
         isOpen={showBudgetVsTransactionsModal} 
         onClose={() => setShowBudgetVsTransactionsModal(false)} 
         budgetData={budgetAgainstTransactions} 
+      />
+      <SubscribeMonthlyModal
+        open={showSubscribeModal}
+        onClose={() => setShowSubscribeModal(false)}
+        userName={user?.username}
+        userEmail={user?.email}
+        userSubscriberStatus={user?.subscriber_is_active}
       />
     </div>
   );
