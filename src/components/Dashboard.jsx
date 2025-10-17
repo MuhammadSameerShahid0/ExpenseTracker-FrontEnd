@@ -841,7 +841,7 @@ const Dashboard = () => {
               <h2>Expense Distribution</h2>
             </div>
 
-            <div className="chart-container">
+            <div className="mobile-responsive-chart-container">
               <div className="pie-chart-wrapper">
                 <div className="pie-chart">
                   {pieChartSlices.length > 0 ? (

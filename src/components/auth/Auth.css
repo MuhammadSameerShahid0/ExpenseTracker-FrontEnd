@@ -1170,6 +1170,8 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  max-width: 100%;
+  word-wrap: break-word;
 }
 
 .card-header .user-info .user-name {
@@ -1178,6 +1180,9 @@ body {
   color: var(--text-color);
   margin: 0 0 0.5rem 0;
   text-align: left;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .card-header .user-info .user-email {
@@ -1185,6 +1190,11 @@ body {
   font-size: 1rem;
   margin: 0 0 1rem 0;
   text-align: left;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  display: block;
+  width: 100%;
 }
 
 .user-stats {
@@ -1204,7 +1214,24 @@ body {
   padding: 0.8rem;
   background: rgba(67, 97, 238, 0.05);
   border-radius: var(--border-radius-sm);
-  min-width: 90px;
+  min-width: 0;
+  max-width: 130px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(67, 97, 238, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  flex: 0 0 auto;
+}
+
+.membership-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.8rem;
+  background: rgba(67, 97, 238, 0.05);
+  border-radius: var(--border-radius-sm);
+  min-width: 0;
+  max-width: 130px;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(67, 97, 238, 0.1);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -1452,20 +1479,32 @@ body {
     margin-right: 0;
     margin-bottom: 0;
     align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   
   .card-header .user-info {
     text-align: center;
     width: 100%;
     max-width: 350px;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
   
   .user-name {
     font-size: 1.4rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
   
   .user-email {
     font-size: 0.9rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    display: block;
+    width: 100%;
+    text-align: center;
   }
   
   .user-stats {
@@ -1476,16 +1515,20 @@ body {
   }
   
   .stat-item {
-    min-width: 80px;
+    min-width: 0;
+    max-width: 120px;
     padding: 0.5rem 0.35rem;
     margin-bottom: 0.4rem;
     flex: 0 0 calc(50% - 0.35rem);
+    text-align: center;
   }
   
   .membership-stat {
-    min-width: 100%;
+    min-width: 0;
+    max-width: 120px;
     margin-top: 0.4rem;
-    flex: 0 0 100%;
+    flex: 0 0 calc(50% - 0.35rem);
+    text-align: center;
   }
   
   .profile-details-grid {
@@ -1559,16 +1602,20 @@ body {
   }
   
   .stat-item {
-    min-width: 85px;
-    padding: 0.6rem 0.4rem;
+    min-width: 0;
+    max-width: 110px;
+    padding: 0.5rem 0.3rem;
     margin-bottom: 0.5rem;
-    flex: 0 0 calc(33.333% - 0.5rem);
+    flex: 0 0 calc(50% - 0.4rem);
+    text-align: center;
   }
   
   .membership-stat {
-    min-width: 100%;
+    min-width: 0;
+    max-width: 110px;
     margin-top: 0.5rem;
-    flex: 0 0 100%;
+    flex: 0 0 calc(50% - 0.4rem);
+    text-align: center;
   }
   
   .profile-card {
@@ -1610,37 +1657,51 @@ body {
   
   .user-name {
     font-size: 1.2rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
   
   .user-email {
     font-size: 0.85rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    display: block;
+    width: 100%;
+    text-align: center;
   }
   
   .user-stats {
     gap: 0.5rem;
+    justify-content: center;
   }
   
   .stat-item {
-    min-width: 70px;
+    min-width: 0;
+    max-width: 100px;
     padding: 0.4rem 0.25rem;
     margin-bottom: 0.4rem;
     flex: 0 0 calc(50% - 0.25rem);
+    text-align: center;
   }
   
   .stat-value {
     font-size: 0.7rem;
     word-break: break-word;
+    display: block;
   }
   
   .stat-label {
     font-size: 0.55rem;
     word-break: break-word;
+    display: block;
   }
   
   .membership-stat {
-    min-width: 100%;
-    flex: 0 0 100%;
+    min-width: 0;
+    max-width: 100px;
+    flex: 0 0 calc(50% - 0.25rem);
     padding: 0.4rem 0.25rem;
+    text-align: center;
   }
   
   .profile-details-grid {
@@ -1653,6 +1714,7 @@ body {
   
   .detail-content p {
     font-size: 0.85rem;
+    margin-bottom: 0.25rem;
   }
   
   .detail-icon {
@@ -1687,27 +1749,52 @@ body {
   
   .user-name {
     font-size: 1.1rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
   
   .user-email {
     font-size: 0.8rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .user-stats {
+    gap: 0.3rem;
+    justify-content: center;
   }
   
   .stat-item {
-    min-width: 65px;
+    min-width: 0;
+    max-width: 100%;
     padding: 0.35rem 0.2rem;
     margin-bottom: 0.3rem;
     flex: 0 0 100%;
+    text-align: center;
+  }
+  
+  .membership-stat {
+    min-width: 0;
+    max-width: 100%;
+    padding: 0.35rem 0.2rem;
+    margin-bottom: 0.3rem;
+    flex: 0 0 100%;
+    text-align: center;
   }
   
   .stat-value {
     font-size: 0.65rem;
     word-break: break-word;
+    display: block;
   }
   
   .stat-label {
     font-size: 0.5rem;
     word-break: break-word;
+    display: block;
   }
   
   .user-name {

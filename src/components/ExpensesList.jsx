@@ -21,6 +21,8 @@ const ExpensesList = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [expenseToEdit, setExpenseToEdit] = useState(null);
   const [messageModal, setMessageModal] = useState({ show: false, type: '', text: '' });
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [expenseToDelete, setExpenseToDelete] = useState(null);
   const navigate = useNavigate();
 
   // Check if user is authenticated
@@ -117,9 +119,33 @@ const ExpensesList = () => {
     }
   };
 
+  // Show delete confirmation modal
+  const showDeleteConfirmationModal = (expense) => {
+    setExpenseToDelete(expense);
+    setShowDeleteConfirmation(true);
+  };
+
+  // Hide delete confirmation modal
+  const hideDeleteConfirmationModal = () => {
+    setShowDeleteConfirmation(false);
+    setExpenseToDelete(null);
+  };
+
   // Delete selected expense
-  const handleDeleteSelected = async () => {
+  const handleDeleteSelected = () => {
     if (!selectedExpense) return;
+    
+    // Find the selected expense details to show in confirmation
+    const expenseDetails = expenses.find(expense => expense.id === selectedExpense);
+    if (!expenseDetails) return;
+    
+    // Show the confirmation modal instead of alert
+    showDeleteConfirmationModal(expenseDetails);
+  };
+
+  // Confirm and execute the delete
+  const confirmDelete = async () => {
+    if (!selectedExpense || !expenseToDelete) return;
     
     try {
       const response = await makeApiRequest(`/api/delete_expense_list_item?transaction_id=${selectedExpense}`, {
@@ -141,10 +167,7 @@ const ExpensesList = () => {
           );
           
           // Update total amount
-          const deletedExpense = expenses.find(expense => expense.id === selectedExpense);
-          if (deletedExpense) {
-            setTotalAmount(prevTotal => prevTotal - deletedExpense.amount);
-          }
+          setTotalAmount(prevTotal => prevTotal - expenseToDelete.amount);
           
           // Clear selection and exit select mode
           setSelectedExpense(null);
@@ -161,6 +184,9 @@ const ExpensesList = () => {
     } catch (error) {
       console.error('Error deleting expense:', error);
       showMessageModal('error', 'An error occurred while deleting the expense.');
+    } finally {
+      // Hide the confirmation modal after deletion
+      hideDeleteConfirmationModal();
     }
   };
 
@@ -234,6 +260,10 @@ const ExpensesList = () => {
           )
         );
         closeEditModal();
+        
+        // Unselect the expense and exit select mode after successful edit
+        setSelectedExpense(null);
+        setIsSelectMode(false);
         
         // Show the backend's return message
         const successMessage = typeof responseData === 'string' ? responseData : (responseData.detail || 'Expense updated successfully!');
@@ -353,7 +383,7 @@ const ExpensesList = () => {
   }
 
   return (
-    <div className="expenses-container">
+    <div className={`expenses-container ${showEditModal || showDeleteConfirmation || messageModal.show ? 'modal-open' : ''}`}>
       <main className="expenses-main">
         <div className="expenses-layout">
           {/* Sidebar with totals and categories */}
@@ -636,6 +666,32 @@ const ExpensesList = () => {
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirmation && expenseToDelete && (
+        <div className="modal-overlay" onClick={hideDeleteConfirmationModal}>
+          <div className="delete-confirmation-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Confirm Deletion</h3>
+              <button className="modal-close" onClick={hideDeleteConfirmationModal}>×</button>
+            </div>
+            <div className="modal-body">
+              <p>Are you sure you want to delete the <strong>{expenseToDelete.description || 'No description'} </strong>expense:</p>
+              <p className="delete-item-description"><strong>Description: {expenseToDelete.description || 'No description'}</strong></p>
+              <p className="delete-item-amount">Amount: PKR {expenseToDelete.amount.toFixed(2)}</p>
+              <p>This action can't be undone 😒</p>
+            </div>
+            <div className="modal-actions">
+              <button className="btn btn-secondary" onClick={hideDeleteConfirmationModal}>
+                Cancel
+              </button>
+              <button className="btn btn-danger" onClick={confirmDelete}>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -815,6 +871,9 @@ const EditExpenseModal = ({ expense, onUpdate, onClose, categories }) => {
             <option value="Debit Card">Debit Card</option>
             <option value="Bank Transfer">Bank Transfer</option>
             <option value="Mobile Payment">Mobile Payment</option>
+            {formData.payment_method && !['Cash', 'Credit Card', 'Debit Card', 'Bank Transfer', 'Mobile Payment', 'custom'].includes(formData.payment_method) && !customPaymentOptions.includes(formData.payment_method) && (
+              <option value={formData.payment_method}>{formData.payment_method}</option>
+            )}
             {customPaymentOptions.map((method, index) => (
               <option key={`custom-${index}`} value={method}>
                 {method}

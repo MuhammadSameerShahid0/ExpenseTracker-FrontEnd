@@ -4,11 +4,14 @@ A comprehensive expense tracking application built with React and Vite. This app
 
 ## 🚀 Features
 
-- **User Authentication**: Secure login and registration system
-- **Expense Management**: Add, view, and categorize expenses
-- **Budget Tracking**: Set and monitor spending limits
+- **User Authentication**: Secure login and registration system with Google OAuth support
+- **Two-Factor Authentication (2FA)**: Enhanced security with email verification and authenticator app codes
+- **Account Reactivation**: Reactivate deactivated accounts with email verification
+- **Expense Management**: Add, view, and categorize expenses with custom categories and payment methods
+- **Budget Tracking**: Set and monitor spending limits by category with monthly budget controls, editing, and deletion capabilities
+- **Advanced Dashboard**: Financial insights with spending trends, budget utilization, and expense distribution charts
 - **Detailed Reports**: Generate expense reports with filtering options and PDF export
-- **Responsive Design**: Works seamlessly across devices
+- **Responsive Design**: Works seamlessly across devices with collapsible sidebar
 - **Account Management**: User profile and account settings
 
 ## 📋 Table of Contents
@@ -29,7 +32,7 @@ A comprehensive expense tracking application built with React and Vite. This app
 
 Before you begin, ensure you have the following installed:
 
-- [Node.js](https://nodejs.org/) (version 16 or higher)
+- [Node.js](https://nodejs.org/) (version 18 or higher)
 - npm (comes with Node.js) or [Yarn](https://yarnpkg.com/)
 
 ## Installation
@@ -72,43 +75,6 @@ In the project directory, you can run:
 - `npm run preview` - Locally preview the production build
 - `npm run lint` - Checks code for linting errors
 
-## Project Structure
-
-```
-expense-tracker/
-├── public/
-│   └── vite.svg
-├── src/
-│   ├── assets/
-│   ├── components/
-│   │   ├── auth/
-│   │   │   ├── AccountReactivation.jsx
-│   │   │   ├── AccountSettings.jsx
-│   │   │   ├── AuthContext.jsx
-│   │   │   ├── Login.jsx
-│   │   │   ├── Profile.jsx
-│   │   │   └── Register.jsx
-│   │   ├── utils/
-│   │   ├── AddExpense.jsx
-│   │   ├── BudgetModal.jsx
-│   │   ├── Dashboard.jsx
-│   │   ├── ExpensesList.jsx
-│   │   ├── HomePage.jsx
-│   │   ├── Navbar.jsx
-│   │   ├── Reports.jsx
-│   │   └── Sidebar.jsx
-│   ├── configs/
-│   ├── services/
-│   ├── utils/
-│   ├── App.jsx
-│   ├── App.css
-│   ├── index.css
-│   └── main.jsx
-├── package.json
-├── vite.config.js
-└── README.md
-```
-
 ## Dependencies
 
 ### Core Dependencies
@@ -116,7 +82,7 @@ expense-tracker/
 - **React**: JavaScript library for building user interfaces
 - **React DOM**: React package for DOM-specific methods
 - **React Router DOM**: Declarative routing for React
-- **React Calendar**: Calendar component for date selection
+- **@react-oauth/google**: Google OAuth integration for React applications
 - **jsPDF**: Client-side JavaScript PDF generation
 - **jsPDF Autotable**: Plugin for jsPDF to create tables
 
@@ -133,43 +99,65 @@ expense-tracker/
 ### Authentication
 
 - User registration with validation
-- Secure login system
-- Profile management
-- Account settings and reactivation
+- Secure login system with JWT tokens
+- Google OAuth integration for social login
+- Two-Factor Authentication (2FA) with email verification and authenticator app codes
+- Account reactivation process for deactivated accounts
+- Profile management and account settings
 
 ### Expense Management
 
-- Add new expenses with description, category, amount, and payment method
+- Add new expenses with description, category, amount, date, and payment method
 - View and filter expenses by various criteria
-- Categorize expenses for better tracking
+- Categorize expenses for better tracking (including ability to add custom categories)
+- Custom payment methods (Cash, Credit Card, Debit Card, Jazzcash, Easypaisa, Sadapay, Nayapay, with ability to add custom methods)
+- Expense tips and best practices section in the Add Expense form
 
 ### Budget Tracking
 
-- Set monthly budgets
+- Set monthly budgets by category
 - Track spending against budget limits
-- Visual indicators for budget status
+- Visual indicators for budget status (progress bars and color coding)
+- View and manage multiple budgets with month selection
+- Budget utilization analytics and spending insights
+- Edit or delete existing budgets
+- Financial health indicators based on budget utilization
+
+### Dashboard
+
+- Financial insights with spending trends
+- Expense distribution pie charts showing spending by category
+- Monthly budget utilization progress bars
+- Financial health indicators with recommendations
+- Budget vs transaction comparison
+- Latest transactions preview
+- Savings projection calculations
 
 ### Reporting
 
-- Generate detailed expense reports
+- Generate detailed expense reports with multiple filtering options
 - Filter reports by date range, category, payment method, and amount
-- Export reports to PDF format
-- View report summaries with totals and transaction counts
+- Export reports to PDF format with comprehensive data
+- Preview reports in browser before downloading
+- Summary statistics for filtered expenses
+- Responsive table view of all transaction details
 
 ### Responsive Design
 
 - Mobile-first responsive design
-- Adapts to different screen sizes
+- Collapsible sidebar for desktop users
+- Mobile-friendly navigation with toggle functionality
 - Touch-friendly interface
+- Adaptive layouts for different screen sizes
 
 ## API Integration
 
-The application connects to a backend API with the following base URLs:
+The application connects to a backend API with the following configuration:
 
-- **Development**: `http://localhost:8000`
-- **Production**: `https://expense-tracker-python-fast-api.vercel.app`
+- **Development**: Proxied to `http://localhost:8000` via Vite
+- **Production**: Deployed to `https://expense-tracker-python-fast-api.vercel.app`
 
-The application automatically detects the environment and uses the appropriate API endpoint.
+The Vite configuration includes proxy settings for API requests during development.
 
 ## Contributing
 

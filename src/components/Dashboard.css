@@ -878,6 +878,62 @@
   }
 }
 
+/* Mobile Responsive Chart Container */
+.mobile-responsive-chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+@media (max-width: 480px) {
+  .mobile-responsive-chart-container {
+    padding: 10px 5px;
+  }
+  
+  .mobile-responsive-chart-container .pie-chart-wrapper {
+    width: 160px;
+    height: 160px;
+  }
+  
+  .mobile-responsive-chart-container .chart-center {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .mobile-responsive-chart-container .chart-total {
+    font-size: 14px;
+  }
+  
+  .mobile-responsive-chart-container .chart-label {
+    font-size: 9px;
+  }
+  
+  .mobile-responsive-chart-container .chart-legend {
+    width: 100%;
+    max-width: 180px;
+    gap: 8px;
+  }
+  
+  .mobile-responsive-chart-container .legend-item {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  
+  .mobile-responsive-chart-container .color-dot {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .mobile-responsive-chart-container .legend-label {
+    font-size: 12px;
+  }
+  
+  .mobile-responsive-chart-container .legend-value {
+    font-size: 12px;
+  }
+}
+
   .chart-label {
     font-size: 11px;
   }
