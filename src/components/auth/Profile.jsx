@@ -105,7 +105,7 @@ const Profile = () => {
         console.log('Total transactions data:', totalTransactionsData);
         setStats(prev => ({
           ...prev,
-          totalTransactions: totalTransactionsData.total_transactions || 0
+          totalTransactions: totalTransactionsData || 0
         }));
       } else {
         console.error('Failed to fetch total transactions:', totalTransactionsResponse.status);

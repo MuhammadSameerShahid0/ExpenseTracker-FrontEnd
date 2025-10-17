@@ -202,9 +202,10 @@ const Register = () => {
           method: 'POST'
         });
 
-        const data = await response.json();
-
+        // Check if response is OK before parsing JSON
         if (response.ok) {
+          const data = await response.json();
+          
           // Check if we received a token directly (2FA disabled) or a message (2FA enabled)
           if (data.access_token) {
             // 2FA is disabled, we received a token directly
@@ -219,17 +220,29 @@ const Register = () => {
             setStep(2); // Move to verification step
           }
         } else {
+          // Try to get the error details from the failed response
+          let errorData = {};
+          try {
+            errorData = await response.json();
+          } catch (parseErr) {
+            // If we can't parse the response, use a generic error
+            setError('Registration failed. Please try again.');
+            return;
+          }
+
           // Check if the error is related to an inactive account
-          if (data.detail && data.detail.message.includes('Account not active')) {
+          if (errorData.detail && typeof errorData.detail === 'object' && errorData.detail.message && errorData.detail.message.includes('Account not active')) {
             // Set the email for reactivation and move to reactivation step
             setError(`This email belongs to a deactivated account. Would you like to reactivate it?`);
-            setReactivationEmail(data.detail.email);
+            setReactivationEmail(errorData.detail.email);
             setStep(4); // New step for reactivation
           } else {
-            setError(data.detail || 'Registration failed');
+            // Display the actual API error message
+            setError(errorData.detail || 'Registration failed');
           }
         }
       } catch (err) {
+        // Handle network errors or other non-response errors
         setError('An error occurred during Google registration. Please try again.');
       } finally {
         setIsLoading(false);
