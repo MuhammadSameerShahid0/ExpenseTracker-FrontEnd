@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { makeApiRequest } from '../../utils/api';
 import { useAuth } from './AuthContext';
+import SubscribeMonthlyModal from '../SubscribeMonthlyModal';
 import './AccountSettings.css';
 
 const AccountSettings = () => {
@@ -25,6 +26,7 @@ const AccountSettings = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [exportData, setExportData] = useState([]);
   const [isExporting, setIsExporting] = useState(false);
+  const [showSubscribeModal, setShowSubscribeModal] = useState(false);
   
   const [formData, setFormData] = useState({
     fullname: '',
@@ -36,6 +38,31 @@ const AccountSettings = () => {
   
   const navigate = useNavigate();
   const { logout } = useAuth();
+
+  // Function to get subscriber status from the JWT token
+  const getSubscriberStatusFromToken = () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return false;
+      
+      // Split the token and decode the payload (the part in the middle)
+      const parts = token.split('.');
+      if (parts.length < 2) return false;
+      
+      // Decode the Base64URL encoded payload
+      const payload = JSON.parse(
+        decodeURIComponent(
+          escape(
+            window.atob(parts[1].replace(/-/g, '+').replace(/_/g, '/'))
+          )
+        )
+      );
+      
+      return !!payload?.subscriber_is_active;
+    } catch (err) {
+      return false;
+    }
+  };
 
   
 
@@ -330,6 +357,10 @@ const AccountSettings = () => {
       setLoading(false);
       setShowDeleteModal(false); // Close modal after deletion attempt
     }
+  };
+
+  const handleSubscribeModalClose = () => {
+    setShowSubscribeModal(false);
   };
 
   const fetchLoginHistory = async () => {
@@ -992,7 +1023,44 @@ const AccountSettings = () => {
                   </button>
                 </div>
                 
-                {/* Monthly PDF Report removed */}
+                <div className="action-item">
+                  <div className="action-info">
+                    <div className="action-icon">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6 2H14L20 8V22C20 22.5523 19.5523 23 19 23H6C5.44772 23 5 22.5523 5 22V3C5 2.44772 5.44772 2 6 2Z" fill="#29aae6e7"></path>
+                      <path d="M14 2V8H20" fill="#FFCDD2"></path>
+                      <path d="M9 15H15" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                      <path d="M9 12H15" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                      <path d="M9 18H12" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <h3>Monthly PDF Report</h3>
+                      <p>Subscribe to receive monthly expense summary report</p>
+                      {getSubscriberStatusFromToken() ? (
+                        <div className="status-badge enabled">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          Activated
+                        </div>
+                      ) : (
+                        <div className="status-badge disabled">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          Not Activated
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <button 
+                    className="btn btn-outline"
+                    onClick={() => setShowSubscribeModal(true)}
+                  >
+                    Manage
+                  </button>
+                </div>
                 
                 <div className="action-item danger">
                   <div className="action-info">
@@ -1220,6 +1288,16 @@ const AccountSettings = () => {
             </div>
           </div>
         </div>
+      )}
+      
+      {showSubscribeModal && (
+        <SubscribeMonthlyModal 
+          open={showSubscribeModal}
+          onClose={handleSubscribeModalClose}
+          userName={user?.fullname || user?.email || ''}
+          userEmail={user?.email || ''}
+          userSubscriberStatus={getSubscriberStatusFromToken()}
+        />
       )}
     </div>
   );
