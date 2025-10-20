@@ -9,8 +9,7 @@ const Profile = () => {
   const [error, setError] = useState('');
   const [stats, setStats] = useState({
     totalExpenses: 0,
-    totalTransactions: 0,
-    categoriesCount: 0
+    monthlySpent: 0
   });
   const [membershipDays, setMembershipDays] = useState(0);
   const [totalBudget, setTotalBudget] = useState(0);
@@ -24,7 +23,7 @@ const Profile = () => {
       Promise.all([
         fetchUserProfile(token),
         fetchUserStats(token),
-        fetchCategoriesCount(token),
+        fetchMonthlySpent(token),
         fetchTotalBudgetForMonth(token, new Date().getMonth() + 1)
       ]).then(() => {
         setLoading(false);
@@ -91,25 +90,6 @@ const Profile = () => {
       } else {
         console.error('Failed to fetch total amount:', totalAmountResponse.status);
       }
-
-      // Fetch total transactions
-      const totalTransactionsResponse = await makeApiRequest('/api/total_transactions', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (totalTransactionsResponse.ok) {
-        const totalTransactionsData = await totalTransactionsResponse.json();
-        console.log('Total transactions data:', totalTransactionsData);
-        setStats(prev => ({
-          ...prev,
-          totalTransactions: totalTransactionsData || 0
-        }));
-      } else {
-        console.error('Failed to fetch total transactions:', totalTransactionsResponse.status);
-      }
       
       return true;
     } catch (error) {
@@ -118,9 +98,13 @@ const Profile = () => {
     }
   };
 
-  const fetchCategoriesCount = async (token) => {
+  const fetchMonthlySpent = async (token) => {
     try {
-      const response = await makeApiRequest('/api/categories', {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed, so add 1
+      
+      const response = await makeApiRequest(`/api/monthly_total?year=${year}&month=${month}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -128,19 +112,27 @@ const Profile = () => {
       });
 
       if (response.ok) {
-        const categoriesData = await response.json();
-        console.log('Categories data:', categoriesData);
+        const monthlySpentData = await response.json();
+        console.log('Monthly spent data:', monthlySpentData);
         setStats(prev => ({
           ...prev,
-          categoriesCount: categoriesData.length || 0
+          monthlySpent: monthlySpentData || 0
         }));
       } else {
-        console.error('Failed to fetch categories:', response.status);
+        console.error('Failed to fetch monthly spent:', response.status);
+        setStats(prev => ({
+          ...prev,
+          monthlySpent: 0
+        }));
       }
       
       return true;
     } catch (error) {
-      console.error('Failed to fetch categories count:', error);
+      console.error('Failed to fetch monthly spent:', error);
+      setStats(prev => ({
+        ...prev,
+        monthlySpent: 0
+      }));
       return false;
     }
   };
@@ -221,19 +213,15 @@ const Profile = () => {
                     <div className="user-stats">
                       <div className="stat-item">
                         <span className="stat-value">PKR {stats.totalExpenses.toFixed(2)}</span>
-                        <span className="stat-label">Spent Amount</span>
+                        <span className="stat-label">Total Spent</span>
                       </div>
                       <div className="stat-item">
-                        <span className="stat-value">{stats.categoriesCount}</span>
-                        <span className="stat-label">Categories</span>
-                      </div>
-                      <div className="stat-item">
-                        <span className="stat-value">{stats.totalTransactions}</span>
-                        <span className="stat-label">Transactions</span>
+                        <span className="stat-value">PKR {stats.monthlySpent.toFixed(2)}</span>
+                        <span className="stat-label">This Month ({new Date().toLocaleString('default', { month: 'long' })})</span>
                       </div>
                        <div className="stat-item">
                         <span className="stat-value">PKR {totalBudget.toFixed(2)}</span>
-                        <span className="stat-label">Budget for this month</span>
+                        <span className="stat-label">Budget for this month ({new Date().toLocaleString('default', { month: 'long' })})</span>
                       </div>
                       <div className="stat-item membership-stat">
                         <span className="stat-value">{membershipDays}</span>

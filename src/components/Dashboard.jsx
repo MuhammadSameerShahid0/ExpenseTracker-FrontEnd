@@ -44,6 +44,19 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
 
+  const getSubscriberStatusFromToken = () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return false;
+      const parts = token.split('.');
+      if (parts.length < 2) return false;
+      const payload = JSON.parse(decodeURIComponent(escape(window.atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')))));
+      return !!payload?.subscriber_is_active;
+    } catch (err) {
+      return false;
+    }
+  };
+
   // Handle background blur when modal is open
   useEffect(() => {
     if (showBudgetVsTransactionsModal) {
@@ -914,7 +927,9 @@ const Dashboard = () => {
         onClose={() => setShowSubscribeModal(false)}
         userName={user?.username}
         userEmail={user?.email}
-        userSubscriberStatus={user?.subscriber_is_active}
+        userSubscriberStatus={
+          (user && typeof user.subscriber_is_active !== 'undefined') ? !!user.subscriber_is_active : getSubscriberStatusFromToken()
+        }
       />
     </div>
   );

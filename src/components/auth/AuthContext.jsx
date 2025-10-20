@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { makeApiRequest } from '../../utils/api';
+import { makeApiRequest, setGlobalLogout } from '../../utils/api';
 
 const AuthContext = createContext();
 
@@ -16,6 +16,9 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Set the global logout function so API calls can trigger logout on 401
+    setGlobalLogout(() => logout);
+
     // Check for token parameters in the URL first
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken = urlParams.get('access_token');
@@ -82,6 +85,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+
   const login = (userData, token) => {
     setUser(userData);
     localStorage.setItem('token', token);
@@ -91,6 +95,8 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem('token');
     sessionStorage.removeItem('theme'); // Clear theme from session storage on logout
+    // Redirect to homepage after logout
+    window.location.href = '/';
   };
 
   const value = {

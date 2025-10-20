@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { makeApiRequest } from '../../utils/api';
+import { useAuth } from './AuthContext';
 import './AccountSettings.css';
 
 const AccountSettings = () => {
@@ -21,8 +22,10 @@ const AccountSettings = () => {
   const [verificationCode, setVerificationCode] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [exportData, setExportData] = useState([]);
   const [isExporting, setIsExporting] = useState(false);
+  
   const [formData, setFormData] = useState({
     fullname: '',
     email: '',
@@ -32,6 +35,31 @@ const AccountSettings = () => {
   });
   
   const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  
+
+  // Ref for the top alert container so we can scroll & focus it when messages appear
+  const topAlertRef = useRef(null);
+
+  // Scroll to top and focus the alert when success or error appear
+  useEffect(() => {
+    if (success || error) {
+      if (topAlertRef.current) {
+        try {
+          topAlertRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          topAlertRef.current.focus({ preventScroll: true });
+        } catch (e) {
+          // fallback
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  }, [success, error]);
+
+  
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -218,6 +246,7 @@ const AccountSettings = () => {
     }
   };
 
+
   const handle2FASetup = () => {
     if (user?.status_2fa) {
       setShowDisable2FAModal(true);
@@ -269,38 +298,37 @@ const AccountSettings = () => {
   };
 
   const handleDeleteAccount = async () => {
-    if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-      try {
-        setLoading(true);
-        setError('');
-        
-        const token = localStorage.getItem('token');
-        
-        const response = await makeApiRequest('/api/delete-account', {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        
-        const data = await response.json();
-        
-        if (response.ok) {
-          // Successfully deleted account
-          // Clear local storage and redirect to home page
-          localStorage.removeItem('token');
-          navigate('/');
-          window.location.reload(); // Reload to reset app state
-        } else {
-          setError(data.detail || 'Failed to delete account');
-          setTimeout(() => setError(''), 5000);
-        }
-      } catch (err) {
-        setError('An error occurred while deleting your account');
+    try {
+      setLoading(true);
+      setError('');
+      
+      const token = localStorage.getItem('token');
+      
+      const response = await makeApiRequest('/api/delete-account', {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        // Successfully deleted account
+        // Clear local storage and redirect to home page
+        localStorage.removeItem('token');
+        navigate('/');
+        window.location.reload(); // Reload to reset app state
+      } else {
+        setError(data.detail || 'Failed to delete account');
         setTimeout(() => setError(''), 5000);
-      } finally {
-        setLoading(false);
       }
+    } catch (err) {
+      setError('An error occurred while deleting your account');
+      setTimeout(() => setError(''), 5000);
+    } finally {
+      setLoading(false);
+      setShowDeleteModal(false); // Close modal after deletion attempt
     }
   };
 
@@ -748,8 +776,8 @@ const AccountSettings = () => {
           )}
           
           <div className="settings-content">
-            {error && <div className="alert error">{error}</div>}
-            {success && <div className="alert success">{success}</div>}
+            {error && <div ref={topAlertRef} tabIndex={-1} className="alert error">{error}</div>}
+            {success && <div ref={topAlertRef} tabIndex={-1} className="alert success">{success}</div>}
             
             <div className="modern-card">
               <div className="card-header">
@@ -964,6 +992,8 @@ const AccountSettings = () => {
                   </button>
                 </div>
                 
+                {/* Monthly PDF Report removed */}
+                
                 <div className="action-item danger">
                   <div className="action-info">
                     <div className="action-icon">
@@ -978,7 +1008,7 @@ const AccountSettings = () => {
                   </div>
                   <button 
                     className="btn btn-danger"
-                    onClick={handleDeleteAccount}
+                    onClick={() => setShowDeleteModal(true)}
                   >
                     Delete Account
                   </button>
@@ -1080,6 +1110,7 @@ const AccountSettings = () => {
           </div>
         </div>
       )}
+      
       {showExportModal && (
         <div className="modal-overlay blurred" onClick={() => setShowExportModal(false)}>
           <div className="modal-content export-modal" onClick={(e) => e.stopPropagation()}>
@@ -1133,6 +1164,58 @@ const AccountSettings = () => {
                 onClick={() => setShowExportModal(false)}
               >
                 Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {showDeleteModal && (
+        <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Delete Account</h3>
+              <button 
+                className="modal-close" 
+                onClick={() => setShowDeleteModal(false)}
+              >
+                &times;
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="warning-content">
+                <div className="warning-icon">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 9V11M12 15H12.01M5.07183 19H18.9282C20.4678 19 21.4301 17.3333 20.6603 16L13.7321 4C12.9623 2.66667 11.0378 2.66667 10.268 4L3.33978 16C2.56998 17.3333 3.53223 19 5.07183 19Z" stroke="#E11D48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+                <h4>Are you absolutely sure?</h4>
+                <br/>
+                <p class="warning-text">
+                Your expense records, budgets, and personal information will remain securely stored. 
+                You can reactivate your account anytime to restore full access.
+                </p>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button 
+                className="btn btn-outline" 
+                onClick={() => setShowDeleteModal(false)}
+                disabled={loading}
+              >
+                Cancel
+              </button>
+              <button 
+                className="btn btn-danger" 
+                onClick={handleDeleteAccount}
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <div className="spinner-small white"></div>
+                    Deleting...
+                  </>
+                ) : 'Yes, Delete My Account'}
               </button>
             </div>
           </div>
