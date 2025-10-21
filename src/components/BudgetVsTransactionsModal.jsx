@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import './BudgetVsTransactionsModal.css';
 
+
 const BudgetVsTransactionsModal = ({ isOpen, onClose, budgetData }) => {
   useEffect(() => {
     if (isOpen) {
