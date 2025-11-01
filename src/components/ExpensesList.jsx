@@ -676,7 +676,7 @@ const ExpensesList = () => {
               <button className="modal-close" onClick={hideDeleteConfirmationModal}>×</button>
             </div>
             <div className="modal-body">
-              <p>Are you sure you want to delete the <strong>{expenseToDelete.description || 'No description'} </strong>expense:</p>
+              <p>Are you sure you want to delete this expense:</p>
               <p className="delete-item-description"><strong>Description: {expenseToDelete.description || 'No description'}</strong></p>
               <p className="delete-item-amount">Amount: PKR {expenseToDelete.amount.toFixed(2)}</p>
               <p>This action can't be undone 😒</p>

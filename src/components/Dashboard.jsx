@@ -181,7 +181,7 @@ const Dashboard = () => {
         selectedDate.getMonth() + 1
       ),
       fetchTotalBudgetForMonth(token, selectedBudgetMonth.getMonth() + 1),
-      fetchBudgetAgainstTransactions(token)
+      fetchBudgetAgainstTransactions(token, selectedBudgetMonth.getMonth() + 1)
     ]);
   };
 
@@ -348,9 +348,9 @@ const Dashboard = () => {
   };
 
   // ✅ Fetch budget against transactions data
-  const fetchBudgetAgainstTransactions = async (token) => {
+  const fetchBudgetAgainstTransactions = async (token, month = null) => {
     try {
-      const data = await budgetService.getBudgetAgainstTransactions();
+      const data = await budgetService.getBudgetAgainstTransactions(month);
       setBudgetAgainstTransactions(data);
     } catch (err) {
       console.error("Failed to fetch budget against transactions data:", err);
@@ -375,6 +375,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("token");
     if (token) {
       fetchTotalBudgetForMonth(token, newDate.getMonth() + 1);
+      fetchBudgetAgainstTransactions(token, newDate.getMonth() + 1);
     }
   };
 

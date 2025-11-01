@@ -129,10 +129,20 @@ export const budgetService = {
   },
 
   // Get budget against transactions data
-  async getBudgetAgainstTransactions() {
+  async getBudgetAgainstTransactions(month = null) {
     const token = localStorage.getItem('token');
+    let url = '/api/budget-against-transactions';
     
-    const response = await makeApiRequest('/api/budget-against-transactions', {
+    if (month !== null) {
+      url += `?month=${month}`;
+    } else {
+      // Get current month and format it as two digits
+      const currentMonth = new Date().getMonth() + 1; // getMonth() returns 0-11, so add 1
+      const formattedMonth = String(currentMonth).padStart(2, '0'); // Pad with leading zero if needed
+      url += `?month=${formattedMonth}`;
+    }
+    
+    const response = await makeApiRequest(url, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
